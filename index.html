@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>세상의 모든 IT</title>
+  <style>
+    /* 기존 스타일 유지 */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      text-align: center;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #darkModeToggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: transparent;
+      border: none;
+      font-size: 30px;
+      cursor: pointer;
+      color: #333;
+      z-index: 999;
+      transition: color 0.3s ease;
+    }
+
+    #darkModeToggle.dark {
+      color: #fff;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      padding: 20px;
+      margin-top: 100px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 500px;
+      height: 350px;
+      margin: 10px;
+      border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    iframe:hover {
+      transform: scale(1.05);
+    }
+
+    .top3 {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .card {
+      width: 150px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      background-color: #fff;
+      padding: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .card p {
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .subscribe-btn {
+      background-color: #ff6347;
+      color: white;
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 40px;
+      transition: background-color 0.3s ease;
+    }
+
+    .subscribe-btn:hover {
+      background-color: #e55347;
+    }
+
+    .stars {
+      font-size: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .stars span {
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .stars span:hover {
+      color: #ff6347;
+    }
+
+    body.dark {
+      background-color: #333;
+      color: white;
+    }
+
+    body.dark h1, body.dark p, body.dark .stars span {
+      color: white;
+    }
+
+    @media screen and (max-width: 768px) {
+      iframe {
+        height: 250px;
+      }
+
+      .top3 {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    /* 추가: 댓글/좋아요 스타일 */
+    .comment-section {
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    .comment-form {
+      margin-bottom: 20px;
+    }
+
+    #commentInput {
+      width: 70%;
+      padding: 10px;
+      font-size: 16px;
+      margin-right: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    #commentButton {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    #commentButton:hover {
+      background-color: #45a049;
+    }
+
+    #commentsList {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    #commentsList li {
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #eee;
+      border-radius: 5px;
+    }
+
+    #likeButton {
+      margin-top: 20px;
+      background-color: #ff4081;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #likeButton:hover {
+      background-color: #e73370;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 로딩 화면 -->
+  <div id="loading">
+    <img src="https://media.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif" alt="로딩 중..." />
+    <p>세상의 모든 IT 로딩 중...</p>
+  </div>
+
+  <!-- 다크모드 버튼 -->
+  <button id="darkModeToggle">🌙</button>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="container">
+    <h1>세상의 모든 IT</h1>
+    <p>여러분의 일상에 도움이 될 수 있는 IT 정보들을 한 곳에서 쉽게 확인하세요! 최신 스마트폰, 노트북, AI 기술, 게임 관련 소식까지 매일 업데이트 됩니다.</p>
+
+    <!-- 최신 영상 -->
+    <section>
+      <h2>📢 최신 영상</h2>
+      <div style="display: flex; justify-content: center; gap: 20px;">
+        <iframe src="https://www.youtube.com/embed/uXQ-l6M8tbg" frameborder="0" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/xnC-A4OT_vs" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <!-- 인기 영상 Top3 -->
+    <section>
+      <h2>🔥 인기 쇼츠 Top3</h2>
+      <div class="top3">
+        <div class="card">
+          <a href="https://www.youtube.com/shorts/WyOjOe8VxG8" target="_blank">
+            <img src="https://via.placeholder.com/150" alt="영상1">
+            <p>인기 영상 1</p>
+          </a>
+        </div>
+        <div class="card">
+          <a href="https://www.youtube.com/shorts/KkE83oQImnQ" target="_blank">
+            <img src="https://via.placeholder.com/150" alt="영상2">
+            <p>인기 영상 2</p>
+          </a>
+        </div>
+        <div class="card">
+          <a href="https://www.youtube.com/shorts/xnC-A4OT_vs" target="_blank">
+            <img src="https://via.placeholder.com/150" alt="영상3">
+            <p>인기 영상 3</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 구독 버튼 -->
+    <section>
+      <a href="https://www.youtube.com/@세상의모든IT?sub_confirmation=1" target="_blank" class="subscribe-btn">채널 구독하기 ❤️</a>
+    </section>
+    <section>
+        <a href="https://www.youtube.com/@%EC%84%B8%EC%83%81%EC%9D%98%EB%AA%A8%EB%93%A0IT" target="_blank" class="subscribe-btn">채널 방문하기 🌎</a>
+      </section>
+      
+
+    <!-- 별점 평가 -->
+    <section>
+      <h2>오늘 본 영상 어땠나요?</h2>
+      <div class="stars">
+        <span>⭐️</span><span>⭐️</span><span>⭐️</span><span>⭐️</span><span>⭐️</span>
+      </div>
+    </section>
+
+    <!-- 댓글 + 좋아요 추가 -->
+    <section class="comment-section">
+      <h2>💬 댓글 남기기</h2>
+      <div class="comment-form">
+        <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
+        <button id="commentButton">작성</button>
+      </div>
+      <ul id="commentsList"></ul>
+
+      <button id="likeButton">❤️ 좋아요 0</button>
+    </section>
+
+  </div>
+
+  <script>
+    // 로딩 화면 제거
+    window.onload = function() {
+      setTimeout(function() {
+        document.getElementById('loading').style.display = 'none';
+      }, 2000);
+    };
+
+    // 다크모드 토글
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    darkModeToggle.addEventListener('click', function() {
+      document.body.classList.toggle('dark');
+      darkModeToggle.classList.toggle('dark');
+      darkModeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    });
+
+    // 댓글 작성 기능
+    const commentButton = document.getElementById('commentButton');
+    const commentInput = document.getElementById('commentInput');
+    const commentsList = document.getElementById('commentsList');
+
+    commentButton.addEventListener('click', function() {
+      const comment = commentInput.value.trim();
+      if (comment) {
+        const li = document.createElement('li');
+        li.textContent = comment;
+        commentsList.appendChild(li);
+        commentInput.value = '';
+      }
+    });
+
+    // 좋아요 버튼 기능
+    const likeButton = document.getElementById('likeButton');
+    let likeCount = 0;
+
+    likeButton.addEventListener('click', function() {
+      likeCount++;
+      likeButton.textContent = `❤️ 좋아요 ${likeCount}`;
+    });
+  </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
