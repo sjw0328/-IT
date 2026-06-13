@@ -1,0 +1,15 @@
+{
+  "name": "토론하자",
+  "short_name": "토론하자",
+  "description": "찬반이 갈리는 실시간 토론 플랫폼",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0F1217",
+  "theme_color": "#0F1217",
+  "lang": "ko",
+  "icons": [
+    { "src": "favicon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "favicon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
