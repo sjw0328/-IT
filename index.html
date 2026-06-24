@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<!-- Google Analytics — Do Not Track 존중 + IP 익명화 -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  (function () {
+    var dnt = navigator.doNotTrack == '1' || window.doNotTrack == '1' || navigator.msDoNotTrack == '1';
+    if (dnt) return;   // DNT 설정 시 분석 로드/추적 안 함
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=G-7SYSZXTL1P';
+    document.head.appendChild(s);
+    gtag('js', new Date());
+    gtag('config', 'G-7SYSZXTL1P', { anonymize_ip: true });
+  })();
+</script>
+<title>토론하자 · 찬반이 갈리는 실시간 토론</title>
+<meta name="description" content="한 줄로 입장을 고르고, 근거로 부딪쳐라. 찬반이 진짜로 갈리는 주제만 모은 실시간 토론 플랫폼." />
+<meta name="theme-color" content="#F3F2EF" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="토론하자" />
+<meta property="og:title" content="토론하자 · 찬반이 갈리는 실시간 토론" />
+<meta property="og:description" content="입장 고르고 근거로 부딪쳐라. 넌 어느 편?" />
+<meta property="og:image" content="og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="토론하자 · 찬반이 갈리는 실시간 토론" />
+<meta name="twitter:image" content="og.png" />
+<link rel="icon" type="image/png" href="favicon-32.png" />
+<link rel="apple-touch-icon" href="favicon-180.png" />
+<link rel="manifest" href="site.webmanifest" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<!-- ══ SCREEN 1 — 메인 ══ -->
+<div id="screen-main" class="screen active">
+  <header class="topbar">
+    <a class="logo" href="index.html" style="font-size:46px"><span class="l1">토론</span><span class="l2">하자</span><span class="dot">.</span></a>
+    <div class="search-wrap">
+      <div class="search-input">
+        <svg width="17" height="17"><use href="#ic-search"/></svg>
+        <input type="text" id="searchInput" placeholder="토론 주제 검색 · #해시태그" />
+      </div>
+    </div>
+    <span class="live-counter"><span class="live-dot"></span><b>1</b>명 접속중</span>
+    <button class="streak-chip" id="streakChip" title="연속 출석" hidden><b id="streakN">0</b><span class="streak-d">일 연속</span></button>
+    <button class="icon-btn" id="notifBtn" title="알림" aria-label="알림">
+      <svg width="18" height="18"><use href="#ic-bell"/></svg>
+      <span class="notif-badge" id="notifBadge" hidden>0</span>
+    </button>
+    <button class="me-chip" id="meChip" title="닉네임 바꾸기"></button>
+  </header>
+
+  <!-- 에디션 피커 -->
+  <!-- 에디션 플로팅 버튼 -->
+  <div class="edition-fab" id="editionBtn">
+    <div class="edition-fab-default">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 10l-3.7 2.5 1.4-4.3L2 5.5h4.5z"/></svg>
+      <span>에디션</span>
+    </div>
+    <div class="edition-fab-active">
+      <img class="edition-fab-img" id="editionFabImg" alt="" />
+      <span class="edition-fab-name" id="editionFabName"></span>
+      <span class="edition-fab-off">✕</span>
+    </div>
+  </div>
+
+  <div class="edition-overlay" id="editionOverlay"></div>
+  <div class="edition-picker" id="editionPicker">
+    <div class="ep-head">
+      <span class="ep-title">유튜버 에디션</span>
+      <button class="ep-close" id="editionClose">✕</button>
+    </div>
+    <p class="ep-desc">유튜버랑 같이 하는 에디션</p>
+    <div class="ep-list">
+      <div class="ep-item-wrap">
+        <button class="ep-item" data-mode="wallsu">
+          <div class="ep-thumb"><img src="wallsu-thumb.png" alt="월수" /></div>
+          <div class="ep-info">
+            <div class="ep-name">월수 에디션</div>
+            <div class="ep-sub">김근육의 토론하자</div>
+          </div>
+          <div class="ep-check">✓</div>
+        </button>
+        <button class="ep-link-btn" data-link="wallsu" title="링크 복사">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 7.5a3 3 0 0 0 4.2.3l1.8-1.8a3 3 0 0 0-4.2-4.2L5.7 2.9"/><path d="M8 5.5a3 3 0 0 0-4.2-.3L2 7a3 3 0 0 0 4.2 4.2l1.1-1.1"/></svg>
+          <span class="ep-link-copy-icon" data-id="wallsu">복사</span>
+        </button>
+      </div>
+      <div class="ep-item-wrap">
+        <button class="ep-item" data-mode="seshinsa">
+          <div class="ep-thumb"><img src="seshinsa-thumb.png" alt="세신사" /></div>
+          <div class="ep-info">
+            <div class="ep-name">세신사 에디션</div>
+            <div class="ep-sub">세상의 신기한 사실들</div>
+          </div>
+          <div class="ep-check">✓</div>
+        </button>
+        <button class="ep-link-btn" data-link="seshinsa" title="링크 복사">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 7.5a3 3 0 0 0 4.2.3l1.8-1.8a3 3 0 0 0-4.2-4.2L5.7 2.9"/><path d="M8 5.5a3 3 0 0 0-4.2-.3L2 7a3 3 0 0 0 4.2 4.2l1.1-1.1"/></svg>
+          <span class="ep-link-copy-icon" data-id="seshinsa">복사</span>
+        </button>
+      </div>
+  </div>
+  </div><!-- /edition-picker -->
+
+  <div class="shell">
+    <nav class="pcnav">
+      <div class="navprim-group">
+        <button class="navprim on" data-view="home"><svg width="19" height="19"><use href="#ic-home"/></svg>홈</button>
+        <button class="navprim" data-view="ranking"><svg width="19" height="19"><use href="#ic-fire"/></svg>실시간 랭킹</button>
+        <button class="navprim" data-view="ballots"><svg width="19" height="19"><use href="#ic-ballot"/></svg>투표함<span class="navprim-badge" id="ballotNavBadge" hidden></span></button>
+        <button class="navprim" data-view="profile"><svg width="19" height="19"><use href="#ic-user"/></svg>마이</button>
+      </div>
+      <div class="navcat-wrap" id="navCatWrap">
+        <button class="navcat-toggle" id="navCatToggle" type="button" aria-expanded="false">
+          <svg class="navcat-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
+          <span>카테고리</span>
+        </button>
+        <div class="navcat-items" id="navCatItems" hidden>
+          <div class="nav-item on" data-cat="전체"><span class="nav-dot" style="background:var(--a)"></span>전체</div>
+          <div class="nav-item" data-cat="정치"><span class="nav-dot" style="background:var(--cat-politics)"></span>정치</div>
+          <div class="nav-item" data-cat="축구"><span class="nav-dot" style="background:var(--cat-soccer)"></span>축구</div>
+          <div class="nav-item" data-cat="연예"><span class="nav-dot" style="background:var(--cat-ent)"></span>연예</div>
+          <div class="nav-item" data-cat="게임"><span class="nav-dot" style="background:var(--cat-game)"></span>게임</div>
+          <div class="nav-item" data-cat="사회"><span class="nav-dot" style="background:var(--cat-society)"></span>사회</div>
+          <div class="nav-item" data-cat="경제"><span class="nav-dot" style="background:var(--cat-econ)"></span>경제</div>
+        </div>
+      </div>
+      <div class="pcnav-foot">
+        <a class="btn accent pcnav-create" href="create.html"><svg width="15" height="15"><use href="#ic-plus"/></svg>토론 열기</a>
+        <button class="btn pcnav-ed" id="navEditionBtn" type="button"><svg width="14" height="14"><use href="#ic-sparkle"/></svg>에디션</button>
+        <a class="pcnav-admin" href="admin.html"><svg width="12" height="12"><use href="#ic-shield"/></svg>관리자</a>
+      </div>
+    </nav>
+
+    <div class="views" id="views">
+      <section class="view on" id="view-home">
+        <div class="home-grid">
+    <main class="feed">
+      <div id="annBanner"></div>
+      <!-- 에디션 전용 추천 토론 섹션 -->
+      <div class="ed-picks" id="edPicks" style="display:none">
+        <div class="ed-picks-head">
+          <span class="ed-picks-tag" id="edPicksTag"></span>
+          <span class="ed-picks-title" id="edPicksTitle"></span>
+        </div>
+        <div class="ed-picks-list" id="edPicksList"></div>
+      </div>
+      <div class="ed-banner" id="edBanner" style="display:none">
+        <div class="ed-banner-img-wrap">
+          <img id="edBannerImg" alt="" />
+        </div>
+        <div class="ed-banner-body">
+          <div class="ed-banner-top-row">
+            <div class="ed-banner-title" id="edBannerTitle"></div>
+            <span class="ed-banner-badge" id="edBannerBadge" style="display:none"></span>
+          </div>
+          <div class="ed-banner-sub" id="edBannerSub"></div>
+        </div>
+        <button class="ed-banner-close" id="edBannerClose">✕</button>
+      </div>
+      <div class="mcat-bar" id="mcatBar">
+        <div class="nav-item on" data-cat="전체"><span class="nav-dot" style="background:var(--a)"></span>전체</div>
+        <div class="nav-item" data-cat="정치"><span class="nav-dot" style="background:var(--cat-politics)"></span>정치</div>
+        <div class="nav-item" data-cat="축구"><span class="nav-dot" style="background:var(--cat-soccer)"></span>축구</div>
+        <div class="nav-item" data-cat="연예"><span class="nav-dot" style="background:var(--cat-ent)"></span>연예</div>
+        <div class="nav-item" data-cat="게임"><span class="nav-dot" style="background:var(--cat-game)"></span>게임</div>
+        <div class="nav-item" data-cat="사회"><span class="nav-dot" style="background:var(--cat-society)"></span>사회</div>
+        <div class="nav-item" data-cat="경제"><span class="nav-dot" style="background:var(--cat-econ)"></span>경제</div>
+      </div>
+      <div class="sort-bar">
+        <h2>지금 맞붙는 중</h2>
+        <div class="sort-chips">
+          <span class="chip sort-chip is-on" data-sort="hot">실시간순</span>
+          <span class="chip sort-chip" data-sort="close"><svg width="13" height="13" style="margin-right:-1px"><use href="#ic-scale"/></svg>접전순</span>
+          <span class="chip sort-chip" data-sort="pop">인기순</span>
+          <span class="chip sort-chip" data-sort="new">최신순</span>
+        </div>
+      </div>
+      <div class="board-th">
+        <span class="th-title">제목</span>
+        <span>찬반 현황</span>
+        <span>참여</span>
+      </div>
+      <div class="card-list board" id="feed"></div>
+    </main>
+    <aside class="home-rail">
+      <div class="card rank-card hr-card">
+        <div class="rank-card-head">
+          <svg width="16" height="16" style="color:var(--warn)"><use href="#ic-fire"/></svg>
+          실시간 랭킹
+          <span class="live-dot" style="margin-left:auto"></span>
+          <span style="font-size:10.5px;color:var(--live);font-weight:800">LIVE</span>
+        </div>
+        <div class="rank-list" id="homeRankList"></div>
+      </div>
+      <div class="card pulse-card hr-card">
+        <div class="pulse-label">지금 이 순간</div>
+        <div class="pulse-grid">
+          <div><div class="pulse-num tnum" style="color:var(--a-bright)" id="homePulseCPM">0</div><div class="pulse-desc">분당 새 댓글</div></div>
+          <div><div class="pulse-num tnum" style="color:var(--b-bright)" id="homePulseActive">0</div><div class="pulse-desc">진행중 토론</div></div>
+        </div>
+      </div>
+      <div class="card hr-card hr-cats">
+        <div class="pulse-label">카테고리 바로가기</div>
+        <div class="hr-cat-list">
+          <button class="hr-cat" data-cat="정치"><span class="nav-dot" style="background:var(--cat-politics)"></span>정치</button>
+          <button class="hr-cat" data-cat="축구"><span class="nav-dot" style="background:var(--cat-soccer)"></span>축구</button>
+          <button class="hr-cat" data-cat="연예"><span class="nav-dot" style="background:var(--cat-ent)"></span>연예</button>
+          <button class="hr-cat" data-cat="게임"><span class="nav-dot" style="background:var(--cat-game)"></span>게임</button>
+          <button class="hr-cat" data-cat="사회"><span class="nav-dot" style="background:var(--cat-society)"></span>사회</button>
+          <button class="hr-cat" data-cat="경제"><span class="nav-dot" style="background:var(--cat-econ)"></span>경제</button>
+        </div>
+      </div>
+      <a class="hr-cta" href="create.html"><svg width="16" height="16"><use href="#ic-plus"/></svg>새 토론 열기</a>
+    </aside>
+        </div><!-- /home-grid -->
+      </section>
+
+      <section class="view" id="view-ranking">
+        <div class="ranking-wrap">
+          <div class="card rank-card">
+            <div class="rank-card-head">
+              <svg width="17" height="17" style="color:var(--warn)"><use href="#ic-fire"/></svg>
+              실시간 랭킹
+              <span class="live-dot" style="margin-left:auto"></span>
+              <span style="font-size:11px;color:var(--live);font-weight:700">LIVE</span>
+            </div>
+            <div class="rank-list" id="rankList"></div>
+          </div>
+          <div class="card pulse-card">
+            <div class="pulse-label">지금 이 순간</div>
+            <div class="pulse-grid">
+              <div><div class="pulse-num tnum" style="color:var(--a-bright)" id="pulseCPM">0</div><div class="pulse-desc">분당 새 댓글</div></div>
+              <div><div class="pulse-num tnum" style="color:var(--b-bright)" id="pulseActive">0</div><div class="pulse-desc">진행중 토론</div></div>
+            </div>
+          </div>
+          <div class="ed-rail-card" id="edRailCard" style="display:none">
+            <img id="edRailImg" alt="" />
+            <div class="ed-rail-label" id="edRailLabel"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-ballots"></section>
+      <section class="view" id="view-profile"></section>
+    </div><!-- /views -->
+  </div><!-- /shell -->
+
+  <a class="mfab" href="create.html" aria-label="토론 열기"><svg width="21" height="21"><use href="#ic-plus"/></svg>토론 열기</a>
+
+  <nav class="tabbar">
+    <button class="tabbtn on" data-view="home"><span class="tab-ico"><svg width="22" height="22"><use href="#ic-home"/></svg></span>홈</button>
+    <button class="tabbtn" data-view="ranking"><span class="tab-ico"><svg width="22" height="22"><use href="#ic-fire"/></svg></span>랭킹</button>
+    <button class="tabbtn" data-view="ballots"><span class="tab-ico"><svg width="22" height="22"><use href="#ic-ballot"/></svg></span><span class="tab-badge" id="ballotTabBadge" hidden></span>투표함</button>
+    <a class="tabbtn tab-create" href="create.html"><span class="tab-ico tab-plus"><svg width="22" height="22"><use href="#ic-plus"/></svg></span>열기</a>
+    <button class="tabbtn" data-view="profile"><span class="tab-ico"><svg width="22" height="22"><use href="#ic-user"/></svg></span>마이</button>
+  </nav>
+</div>
+
+<!-- ══ SCREEN 2 — 상세 ══ -->
+<div id="screen-detail" class="screen">
+  <header class="topbar-sm">
+    <button class="btn ghost" data-back="screen-main" style="padding:0 10px;gap:6px">
+      <svg width="16" height="16" style="transform:rotate(180deg)"><use href="#ic-arrow-r"/></svg>목록
+    </button>
+    <a class="logo" href="index.html" style="font-size:26px"><span class="l1">토론</span><span class="l2">하자</span><span class="dot">.</span></a>
+    <div style="flex:1"></div>
+    <span class="live-counter"><span class="live-dot"></span><b id="detailLive">0</b>명 참여중</span>
+    <button class="btn" id="shareBtn" style="margin-left:8px"><svg width="14" height="14"><use href="#ic-share"/></svg>공유</button>
+  </header>
+
+  <div class="detail-body">
+    <div class="detail-top" id="detailTop"></div>
+    <h1 class="detail-title" id="detailTitle"></h1>
+    <div class="card detail-hero-card" id="detailHero"></div>
+
+    <div class="side-tabs" id="sideTabs"></div>
+
+    <div class="cols" id="detailCols">
+      <section class="col" data-side="a">
+        <div class="col-head a" id="headA"></div>
+        <div id="colA"></div>
+      </section>
+      <div class="col-divider"></div>
+      <section class="col" data-side="b">
+        <div class="col-head b" id="headB"></div>
+        <div id="colB"></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="actionbar">
+    <div class="actionbar-inner">
+      <div style="width:300px">
+        <div class="vote-label">내 입장 선택</div>
+        <div class="vote-row" id="voteRow">
+          <button class="vote-btn a" data-side="a">나는 찬성 <span class="pct" id="pctA">0%</span></button>
+          <button class="vote-btn b" data-side="b">나는 반대 <span class="pct" id="pctB">0%</span></button>
+        </div>
+      </div>
+      <div class="input-area">
+        <div class="input-side-label" id="inputLabel" style="color:var(--muted)">찬성/반대부터 골라라</div>
+        <div class="input-wrap" id="inputWrap">
+          <input type="text" id="commentInput" placeholder="입장부터 고르면 댓글 쓸 수 있다" disabled />
+          <button class="send-btn" id="sendBtn" style="background:var(--surface-3);color:var(--muted)">등록</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="unlock" id="unlock">
+  <div class="unlock-card">
+    <div class="ue"></div>
+    <div class="uk">배지 획득</div>
+    <div class="un"></div>
+    <div class="ud"></div>
+    <button id="unlockClose">확인</button>
+  </div>
+</div>
+
+<script src="icons.js"></script>
+<script src="edition-fx.js"></script>
+<script>
+(function(){
+  var EDITIONS = {
+    wallsu: {
+      cls:'wallsu-mode', img:'wallsu-thumb.png',
+      title:'월수 에디션 ON',
+      sub:'구독자 73.9만 · 김근육의 토론하자',
+      badge:'콜라보 이벤트', badgeCls:'wallsu',
+      rail:'월수 에디션 활성화 중',
+      picksTag:'월수 추천', picksTitle:'지금 핫한 토론',
+      picks:[
+        { title:'한국은 진짜 선진국인가?', a:'그렇다', b:'아직 아니다', pct:58, voters:2140 },
+        { title:'징병제 폐지해야 하나?', a:'폐지해야', b:'유지해야', pct:44, voters:1876 },
+        { title:'국정원이 필요한가?', a:'필요하다', b:'없애야 한다', pct:61, voters:934 },
+        { title:'수능 폐지해야 하나?', a:'폐지해야', b:'유지해야', pct:67, voters:3201 }
+      ]
+    },
+    seshinsa: {
+      cls:'seshinsa-mode', img:'seshinsa-thumb.png',
+      title:'세신사 에디션 ON',
+      sub:'구독자 63.9만 · 세상의 신기한 사실들',
+      badge:'특집 에피소드', badgeCls:'seshinsa',
+      rail:'세신사 에디션 활성화 중',
+      picksTag:'세신사 추천', picksTitle:'지금 핫한 토론',
+      picks:[
+        { title:'북한과 대화해야 하나?', a:'대화해야', b:'단절해야', pct:52, voters:3847 },
+        { title:'통일이 실제로 이득인가?', a:'이득이다', b:'손해다', pct:41, voters:2219 },
+        { title:'국방비 더 늘려야 하나?', a:'늘려야', b:'현행 유지', pct:63, voters:1562 },
+        { title:'대북 전단 살포, 해야 하나?', a:'해야 한다', b:'하지 말아야', pct:38, voters:987 }
+      ]
+    }
+  };
+  var current = '';
+  var btn         = document.getElementById('editionBtn');
+  var picker      = document.getElementById('editionPicker');
+  var overlay     = document.getElementById('editionOverlay');
+  var closeX      = document.getElementById('editionClose');
+  var banner      = document.getElementById('edBanner');
+  var bannerImg   = document.getElementById('edBannerImg');
+  var bannerTitle = document.getElementById('edBannerTitle');
+  var bannerSub   = document.getElementById('edBannerSub');
+  var bannerClose = document.getElementById('edBannerClose');
+  var railCard    = document.getElementById('edRailCard');
+  var railImg     = document.getElementById('edRailImg');
+  var railLabel   = document.getElementById('edRailLabel');
+
+  function applyMode(mode) {
+    Object.keys(EDITIONS).forEach(function(k){ document.body.classList.remove(EDITIONS[k].cls); });
+    window.THJ_EDITION = (mode && EDITIONS[mode]) ? mode : '';
+    if (window.THJ_FX) THJ_FX.onEditionChange(window.THJ_EDITION);
+    document.querySelectorAll('.ep-item[data-mode]').forEach(function(it){
+      it.classList.toggle('is-on', it.dataset.mode === mode);
+    });
+    btn.classList.toggle('is-on', !!mode);
+    current = mode;
+    var picks     = document.getElementById('edPicks');
+    var picksTag  = document.getElementById('edPicksTag');
+    var picksTitle= document.getElementById('edPicksTitle');
+    var picksList = document.getElementById('edPicksList');
+    if (mode && EDITIONS[mode]) {
+      var ed = EDITIONS[mode];
+      document.body.classList.add(ed.cls);
+      bannerImg.src = ed.img; bannerImg.alt = mode;
+      bannerTitle.textContent = ed.title;
+      bannerSub.textContent   = ed.sub;
+      var badgeEl = document.getElementById('edBannerBadge');
+      if (badgeEl) {
+        badgeEl.textContent = ed.badge || '';
+        badgeEl.className   = 'ed-banner-badge' + (ed.badgeCls ? ' ed-banner-badge--' + ed.badgeCls : '');
+        badgeEl.style.display = ed.badge ? 'inline-flex' : 'none';
+      }
+      banner.style.display    = 'flex';
+      railImg.src = ed.img; railImg.alt = mode;
+      railLabel.textContent   = ed.rail;
+      railCard.style.display  = 'block';
+      // 추천 토론 섹션
+      picksTag.textContent   = ed.picksTag;
+      picksTitle.textContent = ed.picksTitle;
+      picksList.innerHTML = ed.picks.map(function(p, i){
+        return '<div class="ed-pick-card" data-pick-idx="' + i + '" style="cursor:pointer">' +
+          '<div class="ed-pick-title">' + p.title + '</div>' +
+          '<div class="ed-pick-votes">' +
+            '<span class="ed-pick-a">' + p.a + '</span>' +
+            '<span class="ed-pick-vs">VS</span>' +
+            '<span class="ed-pick-b">' + p.b + '</span>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      // 추천 카드 클릭 → DB에서 같은 제목 토론 찾아 열기 (없으면 검색)
+      picksList.querySelectorAll('.ed-pick-card').forEach(function(card, i) {
+        card.addEventListener('click', function() {
+          var title = ed.picks[i] && ed.picks[i].title;
+          if (!title) return;
+          if (window.DB && typeof DB.topics === 'function') {
+            DB.topics().then(function(topics) {
+              var match = topics.find(function(t) { return t.title === title; });
+              if (match && typeof openDetail === 'function') {
+                openDetail(match.id);
+              } else {
+                // 매칭 토론 없으면 검색창에 제목 입력
+                var searchEl = document.getElementById('searchInput');
+                if (searchEl) {
+                  searchEl.value = title;
+                  searchEl.dispatchEvent(new Event('input'));
+                  searchEl.focus();
+                }
+              }
+            });
+          }
+        });
+      });
+      // 모바일 가로 캐러셀 — 스와이프로 나머지 추천이 더 있다는 인디케이터(점)
+      var dotsWrap = document.getElementById('edPicksDots');
+      if (!dotsWrap) {
+        dotsWrap = document.createElement('div');
+        dotsWrap.id = 'edPicksDots'; dotsWrap.className = 'ed-picks-dots';
+        picksList.parentNode.appendChild(dotsWrap);
+      }
+      dotsWrap.innerHTML = ed.picks.map(function(_, i){ return '<span class="epd' + (i === 0 ? ' on' : '') + '"></span>'; }).join('');
+      var dots = dotsWrap.querySelectorAll('.epd');
+      picksList.onscroll = function(){
+        var step = picksList.scrollWidth / ed.picks.length;
+        var i = Math.min(ed.picks.length - 1, Math.round(picksList.scrollLeft / step));
+        dots.forEach(function(dd, di){ dd.classList.toggle('on', di === i); });
+      };
+      picks.style.display = 'block';
+    } else {
+      banner.style.display   = 'none';
+      railCard.style.display = 'none';
+      picks.style.display    = 'none';
+    }
+    // FAB 상태 업데이트
+    var fabDefault = document.querySelector('.edition-fab-default');
+    var fabActive  = document.querySelector('.edition-fab-active');
+    var fabImg     = document.getElementById('editionFabImg');
+    var fabName    = document.getElementById('editionFabName');
+    var fabEl      = document.getElementById('editionBtn');
+    if (mode && EDITIONS[mode]) {
+      fabDefault.style.display = 'none';
+      fabActive.style.display  = 'flex';
+      fabImg.src  = EDITIONS[mode].img;
+      fabName.textContent = mode === 'wallsu' ? '월수' : '세신사';
+      fabEl.classList.add('is-on');
+    } else {
+      fabDefault.style.display = 'flex';
+      fabActive.style.display  = 'none';
+      fabEl.classList.remove('is-on');
+    }
+  }
+
+  // URL 파라미터로 에디션 자동 활성화 (?edition=wallsu)
+  var urlEdition = new URLSearchParams(window.location.search).get('edition') || '';
+  applyMode(EDITIONS[urlEdition] ? urlEdition : '');
+
+  function openPicker()  { picker.classList.add('show'); overlay.classList.add('show'); }
+  function closePicker() { picker.classList.remove('show'); overlay.classList.remove('show'); }
+
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    picker.classList.contains('show') ? closePicker() : openPicker();
+  });
+  overlay.addEventListener('click', closePicker);
+  if (closeX) closeX.addEventListener('click', closePicker);
+  if (bannerClose) bannerClose.addEventListener('click', function(){ applyMode(''); });
+  // FAB ✕ 클릭 → 에디션 끄기
+  var fabOffEl = document.querySelector('.edition-fab-off');
+  if (fabOffEl) fabOffEl.addEventListener('click', function(e){
+    e.stopPropagation(); applyMode('');
+  });
+  document.querySelectorAll('.ep-item[data-mode]').forEach(function(item){
+    item.addEventListener('click', function(){
+      applyMode(item.dataset.mode === current ? '' : item.dataset.mode);
+      closePicker();
+    });
+  });
+  // ── 링크 복사 ──────────────────────────────────
+  document.querySelectorAll('.ep-link-btn').forEach(function(linkBtn) {
+    linkBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var mode   = linkBtn.dataset.link;
+      var iconEl = linkBtn.querySelector('.ep-link-copy-icon');
+      // 현재 도메인이 프로덕션이면 그대로, 아니면 현재 URL 기준으로 생성
+      var prodOrigin = 'http://\ud1a0\ub860\ud558\uc790.kro.kr';
+      var baseOrigin = (window.location.hostname === '\ud1a0\ub860\ud558\uc790.kro.kr' || window.location.hostname === 'xn--hq1bm8jm9l.kro.kr') ? prodOrigin : (window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, ''));
+      var url    = baseOrigin + '/?edition=' + mode;
+      function done() {
+        var orig = iconEl.textContent;
+        iconEl.textContent = '\u2713 \ubcf5\uc0ac\ub428'; iconEl.style.color = 'var(--live)';
+        setTimeout(function(){ iconEl.textContent = orig; iconEl.style.color = ''; }, 2200);
+      }
+      function fallback() {
+        var ta = document.createElement('textarea');
+        ta.value = url; ta.style.cssText = 'position:fixed;top:0;left:0;width:2px;height:2px;opacity:0;';
+        document.body.appendChild(ta); ta.focus(); ta.select();
+        var ok = false; try { ok = document.execCommand('copy'); } catch(err) {}
+        document.body.removeChild(ta);
+        if (ok) { done(); } else {
+          iconEl.textContent = url;
+          iconEl.style.cssText = 'font-size:9px;color:var(--text);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+          setTimeout(function(){ iconEl.textContent = '\ubcf5\uc0ac'; iconEl.style.cssText = ''; }, 5000);
+        }
+      }
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(url).then(done).catch(fallback);
+      } else { fallback(); }
+    });
+  });
+})();
+</script>
+<script>
+/* 왼쪽 카테고리 — 기본 숨김, 버튼 눌러야 펼침 */
+(function(){
+  var toggle = document.getElementById('navCatToggle');
+  var items  = document.getElementById('navCatItems');
+  if (!toggle || !items) return;
+  toggle.addEventListener('click', function(){
+    var open = items.hasAttribute('hidden');
+    if (open) { items.removeAttribute('hidden'); toggle.setAttribute('aria-expanded','true'); }
+    else      { items.setAttribute('hidden',''); toggle.setAttribute('aria-expanded','false'); }
+  });
+})();
+</script>
+<script>
+/* 배틀 응원 — 피드에서 찬/반 % 를 탭하면 그 편이 출렁 + 내 편 기억 */
+(function(){
+  try { window.__thjPicks = JSON.parse(localStorage.getItem('thj_quickpick') || '{}'); }
+  catch (e) { window.__thjPicks = {}; }
+  function save(){ try { localStorage.setItem('thj_quickpick', JSON.stringify(window.__thjPicks)); } catch (e) {} }
+
+  document.addEventListener('click', function(e){
+    var hit = e.target.closest('[data-cheer]');
+    if (!hit) return;
+    var row = hit.closest('.brow.battle');
+    if (!row) return;
+    e.stopPropagation();          // 행 클릭(상세 진입) 막기
+    e.preventDefault();
+    var id   = row.dataset.id;
+    var side = hit.dataset.cheer;
+    var picks = window.__thjPicks;
+    var was = picks[id];
+
+    // 같은 편 다시 누르면 응원 취소, 아니면 그 편으로
+    if (was === side) { delete picks[id]; }
+    else { picks[id] = side; }
+    save();
+
+    // 내 편 표시 갱신 — 화살표(.on) + 퍼센트(.mine)
+    var mine = picks[id];
+    row.classList.toggle('picked-a', mine === 'a');
+    row.classList.toggle('picked-b', mine === 'b');
+    var vote = row.querySelector('.bt-vote');
+    if (vote) { vote.classList.toggle('a', mine === 'a'); vote.classList.toggle('b', mine === 'b'); }
+    row.querySelectorAll('[data-cheer]').forEach(function(el){
+      var on = mine === el.dataset.cheer;
+      if (el.classList.contains('bt-arrow')) el.classList.toggle('on', on);
+      if (el.classList.contains('bt-pct'))   el.classList.toggle('mine', on);
+    });
+
+    if (mine) {
+      // 손맛 — 바 출렁 + 파편 + 진동
+      var bar = row.querySelector('.bt-bar');
+      if (bar) {
+        bar.classList.remove('cheer-a','cheer-b');
+        void bar.offsetWidth;                 // reflow → 애니메이션 재시작
+        bar.classList.add('cheer-' + side);
+        var spark = document.createElement('span');
+        spark.className = 'bt-spark';
+        spark.textContent = '+1';
+        spark.style.color = side === 'a' ? 'var(--a)' : 'var(--b)';
+        spark.style[side === 'a' ? 'left' : 'right'] = '8%';
+        spark.style.top = '-4px';
+        bar.appendChild(spark);
+        setTimeout(function(){ spark.remove(); bar.classList.remove('cheer-'+side); }, 720);
+      }
+      if (navigator.vibrate) { try { navigator.vibrate(12); } catch (e) {} }
+    }
+  }, true);   // 캡처 단계 — 행 위임 핸들러보다 먼저 가로채 상세 진입 차단
+})();
+</script>
+<script src="supabase.js"></script>
+<script src="share.js"></script>
+<script src="app.js"></script>
+<script src="me.js"></script>
+<script src="notify.js"></script>
+<script src="onboard.js"></script>
+<script src="pwa.js"></script>
+</body>
+</html>
