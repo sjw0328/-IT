@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>토론하자, 그 시작에 있던 초등학생 · 서주원</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  :root{
+    --paper:#FBF7EF; --desk:#E7E0D2; --paper-2:#F4EEE1;
+    --ink:#2B2722; --ink-soft:#6B6155; --ink-faint:#A89D8C;
+    --rule:#E4DCCB; --rule-2:#D8CEB9;
+    --blue:#3E72E0; --blue-soft:#E6EDFB;
+    --red:#E14B68; --red-soft:#FBE7EB;
+    --gold:#C28A2A; --gold-soft:#F5EAD2;
+    --serif:'Nanum Myeongjo', serif;
+    --sans:'Pretendard', -apple-system, system-ui, sans-serif;
+    --display:'Black Han Sans', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--desk);font-family:var(--serif);color:var(--ink);
+    -webkit-font-smoothing:antialiased;padding:40px 16px 70px;line-height:1.85;}
+  .book{display:flex;flex-direction:column;align-items:center;gap:26px;}
+
+  .page{width:816px;max-width:100%;min-height:1056px;background:var(--paper);
+    padding:84px 84px 72px;position:relative;border-radius:3px;
+    box-shadow:0 3px 18px rgba(40,30,15,.13);display:flex;flex-direction:column;}
+  .page .pgnum{position:absolute;bottom:42px;left:0;right:0;text-align:center;
+    font-family:var(--sans);font-size:11px;color:var(--ink-faint);letter-spacing:1px;}
+  .page .run{position:absolute;top:44px;left:84px;right:84px;display:flex;justify-content:space-between;gap:16px;
+    font-family:var(--sans);font-size:10.5px;letter-spacing:1.5px;color:var(--ink-faint);text-transform:uppercase;}
+  .page .run span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .page .run .r2{color:var(--red);font-weight:700;}
+
+  /* ── body type ── */
+  p{font-size:16px;line-height:1.95;margin-bottom:15px;text-wrap:pretty;word-break:keep-all;}
+  .em{color:var(--blue);font-weight:700;}
+  .em-r{color:var(--red);font-weight:700;}
+  strong{font-weight:800;}
+  .lead::first-letter{font-family:var(--display);font-size:58px;float:left;line-height:.82;
+    margin:7px 12px 0 0;color:var(--red);}
+
+  h2.chap{font-family:var(--display);font-size:30px;line-height:1.25;letter-spacing:-.5px;
+    color:var(--ink);margin-bottom:6px;font-weight:400;}
+  .chap-sub{font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.5px;color:var(--ink-faint);
+    margin-bottom:26px;}
+
+  /* ── chapter number banner ── */
+  .chtag{display:inline-flex;align-items:baseline;gap:12px;margin-bottom:22px;
+    padding-bottom:14px;border-bottom:2px solid var(--ink);}
+  .chtag .c1{font-family:var(--display);font-size:15px;color:var(--red);letter-spacing:2px;}
+  .chtag .c2{font-family:var(--display);font-size:34px;letter-spacing:-1px;}
+  .chtag .c3{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--ink-soft);}
+
+  /* ── callouts ── */
+  .note{font-family:var(--sans);background:var(--blue-soft);border-left:4px solid var(--blue);
+    border-radius:0 8px 8px 0;padding:15px 18px;margin:8px 0 18px;font-size:14px;line-height:1.7;color:#2A3C63;}
+  .note.r{background:var(--red-soft);border-left-color:var(--red);color:#6A2233;}
+  .note.g{background:var(--gold-soft);border-left-color:var(--gold);color:#5C4416;}
+  .note .nl{display:block;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+    margin-bottom:5px;opacity:.7;}
+  .note b{font-weight:800;}
+
+  .quote{font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.7;color:var(--ink);
+    text-align:center;margin:26px 30px;text-wrap:balance;}
+  .quote .by{display:block;font-style:normal;font-family:var(--sans);font-size:12px;font-weight:700;
+    color:var(--ink-faint);margin-top:12px;letter-spacing:.5px;}
+
+  .rule{height:1px;background:var(--rule);margin:22px 0;}
+  .orn{text-align:center;color:var(--rule-2);font-size:18px;letter-spacing:8px;margin:24px 0;}
+
+  /* ── lists ── */
+  ul.bk{list-style:none;display:flex;flex-direction:column;gap:11px;margin:6px 0 18px;}
+  ul.bk li{font-size:15.5px;line-height:1.6;padding-left:24px;position:relative;word-break:keep-all;}
+  ul.bk li::before{content:'';position:absolute;left:4px;top:11px;width:7px;height:7px;border-radius:50%;background:var(--blue);}
+  ul.bk li.r::before{background:var(--red);}
+  ul.bk li b{font-weight:800;}
+
+  /* ── contents ── */
+  .toc-list{display:flex;flex-direction:column;gap:2px;margin-top:8px;font-family:var(--sans);}
+  .toc-row{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px dotted var(--rule-2);font-size:14px;}
+  .toc-row .tn{font-family:var(--display);font-size:12px;color:var(--red);width:28px;flex:0 0 auto;}
+  .toc-row .tt{font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .toc-row .tp{margin-left:auto;color:var(--ink-faint);font-size:13px;flex:0 0 auto;}
+  .toc-part{font-family:var(--display);font-size:12px;letter-spacing:1px;color:var(--ink-faint);
+    margin:15px 0 3px;}
+  .toc-part:first-child{margin-top:4px;}
+
+  /* ── stats grid ── */
+  .nums{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:10px 0 8px;font-family:var(--sans);}
+  .numc{background:var(--paper-2);border:1px solid var(--rule);border-radius:12px;padding:18px 20px;}
+  .numc .nv{font-family:var(--display);font-size:34px;line-height:1;color:var(--blue);letter-spacing:-1px;}
+  .numc .nv.r{color:var(--red);} .numc .nv.g{color:var(--gold);}
+  .numc .nl{font-size:13px;font-weight:700;color:var(--ink-soft);margin-top:9px;}
+  .numc .nd{font-size:11.5px;color:var(--ink-faint);margin-top:3px;line-height:1.4;}
+
+  /* ── cover ── */
+  .cover{background:
+      radial-gradient(120% 80% at 50% -10%, #1b2230 0%, #11151d 55%, #0d1016 100%);
+    color:#F4F1EA;align-items:center;justify-content:center;text-align:center;overflow:hidden;}
+  .cover .cv-top{font-family:var(--sans);font-size:12px;font-weight:800;letter-spacing:5px;
+    text-transform:uppercase;color:#8FA6CF;margin-bottom:auto;padding-top:18px;}
+  .cover .cv-mid{display:flex;flex-direction:column;align-items:center;}
+  .cover .cv-mark{font-family:var(--display);font-size:78px;line-height:.98;letter-spacing:-2px;}
+  .cover .cv-mark .b{color:#7AA5FF;} .cover .cv-mark .r{color:#F8859A;} .cover .cv-mark .d{color:#ED5470;}
+  .cover .cv-line{width:90px;height:3px;background:linear-gradient(90deg,#4D82F3,#ED5470);margin:32px 0 30px;border-radius:2px;}
+  .cover .cv-sub{font-family:var(--serif);font-size:26px;color:#EDE8DD;letter-spacing:.5px;line-height:1.45;white-space:nowrap;}
+  .cover .cv-tag{font-family:var(--sans);font-size:14px;color:#9AA4B2;margin-top:18px;letter-spacing:1.5px;}
+  .cover .cv-bot{margin-top:auto;font-family:var(--sans);padding-bottom:6px;}
+  .cover .cv-bot .au{font-size:19px;font-weight:800;color:#F4F1EA;letter-spacing:1px;}
+  .cover .cv-bot .au b{color:#7AA5FF;}
+  .cover .cv-bot .me{font-size:12.5px;color:#8B94A2;margin-top:7px;letter-spacing:1px;}
+  .cover .pgnum,.cover .run{display:none;}
+
+  /* ── half title ── */
+  .half{align-items:center;justify-content:center;text-align:center;}
+  .half .ht-mark{font-family:var(--display);font-size:48px;letter-spacing:-1.5px;color:var(--ink);line-height:1.15;}
+  .half .ht-mark .d{color:var(--red);}
+  .half .ht-sub{font-family:var(--serif);font-size:18px;color:var(--ink-soft);margin-top:16px;}
+  .half .ht-q{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--ink-soft);
+    margin-top:38px;max-width:440px;line-height:1.8;text-wrap:balance;}
+  .half .pgnum,.half .run{display:none;}
+
+  /* ── front matter (dedication) ── */
+  .fm{align-items:center;justify-content:center;text-align:center;}
+  .fm .ded{font-family:var(--serif);font-size:18px;line-height:2.05;color:var(--ink);max-width:420px;text-wrap:balance;}
+  .fm .ded .small{display:block;font-family:var(--sans);font-size:13px;color:var(--ink-faint);margin-top:30px;letter-spacing:.5px;}
+  .fm .pgnum,.fm .run{display:none;}
+
+  /* ── part divider ── */
+  .part{background:radial-gradient(130% 80% at 50% 0%, #20283a 0%, #141923 60%, #0f131b 100%);
+    color:#EFEBE1;align-items:center;justify-content:center;text-align:center;}
+  .part .pt-k{font-family:var(--sans);font-size:12px;font-weight:800;letter-spacing:6px;color:#7E94BE;text-transform:uppercase;}
+  .part .pt-n{font-family:var(--display);font-size:110px;line-height:.9;color:#F4F1EA;margin:6px 0 4px;letter-spacing:-3px;}
+  .part .pt-n .dot{color:#ED5470;}
+  .part .pt-line{width:64px;height:3px;background:linear-gradient(90deg,#4D82F3,#ED5470);margin:18px 0 26px;border-radius:2px;}
+  .part .pt-t{font-family:var(--display);font-size:30px;color:#F4F1EA;letter-spacing:-.5px;}
+  .part .pt-q{font-family:var(--serif);font-style:italic;font-size:16px;color:#9AA4B2;margin-top:22px;max-width:380px;line-height:1.8;text-wrap:balance;}
+  .part .pgnum,.part .run{display:none;}
+
+  .closing{align-items:center;justify-content:center;text-align:center;}
+  .closing .end{font-family:var(--display);font-size:40px;color:var(--red);letter-spacing:-1px;margin-bottom:20px;}
+  .closing p{max-width:480px;}
+  .colo{font-family:var(--sans);font-size:12.5px;color:var(--ink-soft);line-height:1.95;max-width:380px;margin:0 auto;}
+  .colo .t{font-family:var(--display);font-size:18px;color:var(--ink);letter-spacing:-.5px;margin-bottom:14px;}
+
+  .spacer{flex:1;}
+
+  @media (max-width:880px){
+    .page{padding:54px 32px 60px;min-height:0;}
+    .page .run{left:32px;right:32px;top:24px;}
+    .cover .cv-mark{font-size:58px;}
+    .part .pt-n{font-size:84px;}
+    .nums{grid-template-columns:1fr;}
+    .lead::first-letter{font-size:48px;}
+  }
+  @media print{
+    @page{margin:0.7in;}
+    body{background:#fff;padding:0;}
+    .book{gap:0;}
+    .page{box-shadow:none;border-radius:0;width:auto;min-height:auto;padding:0;
+      break-after:page;display:flex;}
+    .page:last-child{break-after:auto;}
+    .cover,.part{min-height:9in;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .note,.numc,.cover,.part,.chtag{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    p,li,.note,.quote,.toc-row,.numc{break-inside:avoid;}
+    h2.chap,.chtag{break-after:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="book">
+
+  <!-- ══ 1 · 표지 ══ -->
+  <section class="page cover" data-screen-label="표지">
+    <div class="cv-top">에세이 · 어느 5학년의 기록</div>
+    <div class="cv-mid">
+      <div class="cv-mark"><span>토론</span><span class="b">하</span><span class="r">자</span><span class="d">,</span></div>
+      <div class="cv-line"></div>
+      <div class="cv-sub">그 시작에 있던 초등학생</div>
+      <div class="cv-tag">— 호기심 하나로 앱을 만든 아이의 이야기 —</div>
+    </div>
+    <div class="cv-bot">
+      <div class="au">서<b>주원</b> 지음</div>
+      <div class="me">초등학교 5학년 · 2026</div>
+    </div>
+  </section>
+
+  <!-- ══ 2 · 반표지 ══ -->
+  <section class="page half" data-screen-label="반표지">
+    <div class="ht-mark">토론하자<span class="d">,</span><br>그 시작에 있던 초등학생</div>
+    <div class="ht-sub">서주원 지음</div>
+    <div class="ht-q">"세상에서 가장 멀어 보이던 일도,<br>알고 보면 첫 줄 하나에서 시작된다."</div>
+  </section>
+
+  <!-- ══ 3 · 헌사 ══ -->
+  <section class="page fm" data-screen-label="헌사">
+    <div class="ded">
+      이 책을<br>
+      "그거 정말 네가 만들었어?" 하고<br>
+      눈을 동그랗게 떠 준 모든 사람과,<br>
+      아직 자기 안의 그림을 꺼내지 못한<br>
+      나 같은 친구들에게 바칩니다.
+      <span class="small">— 서주원</span>
+    </div>
+  </section>
+
+  <!-- ══ 4 · 프롤로그 ══ -->
+  <section class="page" data-screen-label="프롤로그">
+    <div class="run"><span>토론하자, 그 시작에 있던 초등학생</span><span class="r2">프롤로그</span></div>
+    <h2 class="chap">하얀 화면 앞에서</h2>
+    <div class="chap-sub">PROLOGUE · 아무것도 없던 자리에서</div>
+    <p class="lead">처음에는 하얀 화면 하나뿐이었다. 깜빡이는 막대 하나가 전부인, 아무것도 적히지 않은 빈 화면. 어른들은 그런 화면을 보면 막막하다고 한다. 그런데 나는 이상하게 가슴이 뛰었다. 저 텅 빈 곳에 내 머릿속 그림을 그대로 옮길 수만 있다면, 하고.</p>
+    <p>나는 평범한 초등학교 5학년이다. 축구를 좋아하고, 급식 메뉴를 외우고, 친구들과 별것 아닌 일로 편을 갈라 다툰다. 앱을 만들어 본 적은 단 한 번도 없었다. 코딩 학원에 다닌 적도 없다. 그런 내가 며칠 만에 진짜로 굴러가는 앱 하나를 세상에 내놓았다는 이야기를, 지금부터 하려고 한다.</p>
+    <p>이건 자랑하려고 쓰는 책이 아니다. 오히려 나는 이 책에 내가 얼마나 자주 막혔고, 얼마나 자주 화면을 하얗게 만들어 버렸는지를 솔직하게 적었다. 다만 한 가지는 분명히 말하고 싶다. 무언가를 만든다는 건, 내가 생각했던 것보다 훨씬 가까운 곳에 있는 일이었다는 것을.</p>
+    <p>그러니 이 이야기는 거창한 성공담이 아니라, <span class="em-r">한 초등학생이 자기 호기심을 끝까지 따라가 본 기록</span>에 가깝다. 그 시작에 내가 있었다는 게, 나는 지금도 가끔 신기하다.</p>
+    <div class="note g"><span class="nl">시작하기 전 한 줄</span>거창한 계획은 없었다. 그냥 <b>"오늘 하나라도 내 손으로 화면에 띄워 보자"</b>는 마음 하나로 시작했다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 3 —</div>
+  </section>
+
+  <!-- ══ 5 · 차례 ══ -->
+  <section class="page" data-screen-label="차례">
+    <div class="run"><span>토론하자, 그 시작에 있던 초등학생</span><span class="r2">차례</span></div>
+    <h2 class="chap">차례</h2>
+    <div class="chap-sub">CONTENTS</div>
+    <div class="toc-list">
+      <div class="toc-row"><span class="tn">·</span><span class="tt">프롤로그 — 하얀 화면 앞에서</span><span class="tp">3</span></div>
+      <div class="toc-row"><span class="tn">·</span><span class="tt">들어가며 — 이게 뭐냐면</span><span class="tp">6</span></div>
+      <div class="toc-part">제1부 · 호기심에서 시작되었다</div>
+      <div class="toc-row"><span class="tn">1</span><span class="tt">탕수육과 세계의 비밀</span><span class="tp">8</span></div>
+      <div class="toc-row"><span class="tn">2</span><span class="tt">세상은 늘 두 편으로 갈린다</span><span class="tp">9</span></div>
+      <div class="toc-row"><span class="tn">3</span><span class="tt">나에게는 짝꿍이 있었다</span><span class="tp">10</span></div>
+      <div class="toc-part">제2부 · 머릿속 그림을 꺼내다</div>
+      <div class="toc-row"><span class="tn">4</span><span class="tt">말이 곧 그림이 되던 순간</span><span class="tp">12</span></div>
+      <div class="toc-row"><span class="tn">5</span><span class="tt">화면이 하얗게 변했다</span><span class="tp">13</span></div>
+      <div class="toc-row"><span class="tn">6</span><span class="tt">에러는 친절한 쪽지였다</span><span class="tp">14</span></div>
+      <div class="toc-part">제3부 · 앱이 숨을 쉬기 시작했다</div>
+      <div class="toc-row"><span class="tn">7</span><span class="tt">기억하는 앱</span><span class="tp">16</span></div>
+      <div class="toc-row"><span class="tn">8</span><span class="tt">실시간이라는 마법</span><span class="tp">17</span></div>
+      <div class="toc-row"><span class="tn">9</span><span class="tt">밤하늘을 닮은 화면</span><span class="tp">18</span></div>
+      <div class="toc-row"><span class="tn">10</span><span class="tt">나쁜 말을 막는 사람</span><span class="tp">19</span></div>
+      <div class="toc-part">제4부 · 세상으로 내보내다</div>
+      <div class="toc-row"><span class="tn">11</span><span class="tt">다시 오게 하는 종소리</span><span class="tp">21</span></div>
+      <div class="toc-row"><span class="tn">12</span><span class="tt">텅 빈 방에 손님을 부르다</span><span class="tp">22</span></div>
+      <div class="toc-row"><span class="tn">13</span><span class="tt">광고비 0원의 비밀</span><span class="tp">23</span></div>
+      <div class="toc-row"><span class="tn">14</span><span class="tt">"그거 네가 만들었어?"</span><span class="tp">24</span></div>
+      <div class="toc-part">제5부 · 남은 이야기</div>
+      <div class="toc-row"><span class="tn">·</span><span class="tt">숫자로 보는 며칠</span><span class="tp">26</span></div>
+      <div class="toc-row"><span class="tn">·</span><span class="tt">내가 진짜 배운 것</span><span class="tp">27</span></div>
+      <div class="toc-row"><span class="tn">·</span><span class="tt">에필로그 — 다시, 하얀 화면 앞에서</span><span class="tp">28</span></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 4 —</div>
+  </section>
+
+  <!-- ══ 6 · 1부 표지 ══ -->
+  <section class="page part" data-screen-label="제1부">
+    <div class="pt-k">PART ONE</div>
+    <div class="pt-n">1<span class="dot">.</span></div>
+    <div class="pt-line"></div>
+    <div class="pt-t">호기심에서 시작되었다</div>
+    <div class="pt-q">"왜 사람들은 별것도 아닌 일로<br>저렇게 진심으로 싸울까?"</div>
+  </section>
+
+  <!-- ══ 7 · 들어가며 ══ -->
+  <section class="page" data-screen-label="들어가며">
+    <div class="run"><span>토론하자, 그 시작에 있던 초등학생</span><span class="r2">들어가며</span></div>
+    <h2 class="chap">이게 뭐냐면</h2>
+    <div class="chap-sub">토론하자, 그리고 나의 도구들</div>
+    <p class="lead">본격적인 이야기를 시작하기 전에, 내가 만든 것이 무엇인지부터 짧게 소개하고 싶다. <strong>토론하자</strong>는 하나의 주제를 두고 <span class="em">찬성과 반대</span>로 편을 갈라 투표하고, 그 이유를 댓글로 부딪치는 앱이다. 지금 몇 퍼센트가 찬성인지 막대로 실시간으로 보인다.</p>
+    <p>주제는 여섯 칸으로 나누어 두었다. 정치, 축구, 연예, 게임, 사회, 경제. 한쪽이 무조건 옳은 것은 넣지 않았다. 양쪽 다 그럴듯해서 진짜로 반반 갈리는 것들만 골라 담았다. 그래야 사람들이 오래, 즐겁게 떠들 수 있으니까.</p>
+    <p>그리고 솔직히 말하면, 나 혼자 코드를 전부 친 건 아니다. 정확히 말하면 나는 <span class="em">'무엇을, 왜'</span>를 정하는 사람이었고, AI는 <span class="em">'어떻게'</span>를 함께 만드는 짝꿍이었다. 막히면 같이 고민했고, 결정은 늘 내가 내렸다. 이 관계에 대해서는 뒤에서 자세히 이야기하려고 한다.</p>
+    <p>내가 쓴 재료들은 이렇다. 화면과 움직임을 만드는 <strong>HTML·CSS·자바스크립트</strong>, 투표와 댓글을 저장해 두는 인터넷 너머의 큰 공책 같은 <strong>서버</strong>, 그리고 웹사이트를 진짜 앱처럼 휴대폰에 설치하게 해 주는 기술. 한 가지 고집도 있었는데, <span class="em-r">남이 만든 외부 부품은 최대한 빌리지 않기</span>였다.</p>
+    <div class="note"><span class="nl">규칙 하나</span>편한 부품을 가져다 붙이면 쉽지만, 그러면 조립한 게 되지 만든 게 아닌 것 같았다. 그래서 빌려 쓴 외부 부품은 <b>0개</b>로 끝냈다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 6 —</div>
+  </section>
+
+  <!-- ══ 8 · 1장 ══ -->
+  <section class="page" data-screen-label="1장">
+    <div class="run"><span>제1부 · 호기심에서 시작되었다</span><span class="r2">01</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">1</span><span class="c3">탕수육과 세계의 비밀</span></div>
+    <p class="lead">탕수육을 소스에 부어 먹느냐, 찍어 먹느냐. 우리 집 식탁에서 이 문제로 한 시간을 떠든 적이 있다. 엄마는 부먹, 나는 찍먹. 누구도 양보하지 않았고, 누구도 다치지 않았다. 그저 다 같이 즐거웠다. 나는 그날 저녁, 이상한 걸 하나 발견했다.</p>
+    <p><span class="em">사람들은 사소한 걸로 다툴 때 가장 신나 보인다는 것.</span> 정답이 없는 문제일수록 더 그렇다. 정답이 있으면 검색 한 번으로 끝나지만, 정답이 없으면 끝없이 이야기할 수 있다. 탕수육 하나로 한 시간을 떠든 우리처럼 말이다.</p>
+    <p>그런데 곰곰이 생각해 보니, 그 재미있는 다툼들이 어디에도 제대로 모여 있지 않았다. 유튜브 댓글창은 순식간에 묻히고, 단톡방의 말다툼은 다음 날이면 사라진다. 누가 이기고 있는지, 내 생각이 다수인지 소수인지 한눈에 보여 주는 곳이 없었다.</p>
+    <p>그래서 생각했다. <span class="em-r">"흩어진 다툼들을, 한곳에 깔끔하게 모아 두면 어떨까?"</span> 찬성과 반대 딱 두 편으로 갈라서, 지금 몇 퍼센트가 어느 편인지 막대로 보이게. 그게 토론하자의 첫 씨앗이었다. 거창한 사명감 같은 건 없었다. 그냥, 그런 곳이 있으면 내가 제일 재미있게 쓸 것 같았다.</p>
+    <div class="note"><span class="nl">첫 깨달음</span>좋은 아이디어는 멀리 있지 않았다. <b>내가 매일 하고 있던 일</b> 속에 숨어 있었다. 나는 그저 그걸 알아챘을 뿐이다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 8 —</div>
+  </section>
+
+  <!-- ══ 9 · 2장 ══ -->
+  <section class="page" data-screen-label="2장">
+    <div class="run"><span>제1부 · 호기심에서 시작되었다</span><span class="r2">02</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">2</span><span class="c3">세상은 늘 두 편으로 갈린다</span></div>
+    <p class="lead">아이디어를 정하고 나서, 나는 그것을 어떻게 생긴 앱으로 만들지 고민했다. 처음엔 욕심을 부렸다. 별점도 주고, 다섯 가지 선택지도 두고, 이것저것 다 넣고 싶었다. 그런데 만들면 만들수록 복잡해지고, 복잡해질수록 이상하게 재미가 사라졌다.</p>
+    <p>그러다 식탁의 그 장면이 다시 떠올랐다. 부먹과 찍먹. 둘뿐이었다. 셋도 아니고 다섯도 아니고, 딱 둘. <span class="em">편이 둘로 갈릴 때 사람은 가장 뜨거워진다.</span> 어느 쪽도 명백히 옳지 않을 때, 그 팽팽함이 사람을 붙잡아 둔다는 걸 깨달았다.</p>
+    <p>그래서 나는 과감히 다 덜어냈다. 토론하자에는 오직 <span class="em">찬성(파랑)과 반대(빨강)</span>만 남겼다. 화면 한가운데에서 두 색의 막대가 서로 밀고 당긴다. 53 대 47. 누군가 한 표를 더하면 막대가 움찔 움직인다. 그 단순함이 오히려 강했다.</p>
+    <p>주제를 고르는 기준도 분명해졌다. 한쪽이 무조건 옳은 건 토론이 아니라 정답이다. 나는 진짜로 반반 갈리는 것만 골라 담기로 마음먹었다. 그렇게 기준을 세우자, 신기하게도 <span class="em-r">이 앱이 무엇인지</span>가 또렷해졌다.</p>
+    <div class="note r"><span class="nl">덜어내는 용기</span>덜어내는 일은 지는 게 아니었다. 핵심 하나만 남기자 오히려 <b>앱의 성격이 또렷해졌다.</b> 빼는 것도 만드는 일이었다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 9 —</div>
+  </section>
+
+  <!-- ══ 10 · 3장 ══ -->
+  <section class="page" data-screen-label="3장">
+    <div class="run"><span>제1부 · 호기심에서 시작되었다</span><span class="r2">03</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">3</span><span class="c3">나에게는 짝꿍이 있었다</span></div>
+    <p class="lead">여기서 솔직해져야겠다. 나는 코드를 한 줄 한 줄 외워서 직접 쓰지 못한다. 그럼 어떻게 앱을 만들었느냐고? 나에게는 <span class="em">AI라는 짝꿍</span>이 있었다. 우리는 역할을 나눴다. 나는 '무엇을, 왜' 만들지 정하고, AI는 그걸 코드로 옮겼다.</p>
+    <p>처음엔 이게 반칙 같았다. 내가 만든 게 진짜 내 것이 맞나 싶었다. 그런데 며칠 같이 일해 보니 생각이 완전히 바뀌었다. AI는 똑똑하지만, 내 마음을 읽지는 못했다. <span class="em-r">"이런 앱 만들어 줘"</span>라고만 하면 늘 엉뚱한 걸 내놨다. 내가 원하는 걸 분명하게, 구체적으로 말할수록 좋은 결과가 나왔다.</p>
+    <p>그러니까 진짜 어려운 일은 코드를 치는 게 아니라, <span class="em">내가 무엇을 원하는지 정확히 아는 것</span>이었다. 그건 누구도 대신해 줄 수 없었다. AI는 길을 알려 주는 내비게이션이었고, 운전대는 끝까지 내가 잡고 있었다. 어디로 갈지 정하는 사람은 언제나 나였다.</p>
+    <p>그래서 나는 AI를 도구가 아니라 동료라고 생각하기로 했다. 동료에게는 부탁을 잘해야 한다. 내 머릿속을 또박또박 설명할수록, 짝꿍은 더 좋은 걸 만들어 줬다. 결국 좋은 앱을 만드는 일은, <span class="em">좋은 설명을 하는 연습</span>이기도 했다.</p>
+    <div class="note"><span class="nl">짝꿍에 대하여</span>AI는 나를 대신하지 않았다. <b>내 생각을 더 멀리 데려다주는 날개</b>였다. 어디로 날아갈지 정하는 건 늘 나였다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 10 —</div>
+  </section>
+
+  <!-- ══ 11 · 2부 표지 ══ -->
+  <section class="page part" data-screen-label="제2부">
+    <div class="pt-k">PART TWO</div>
+    <div class="pt-n">2<span class="dot">.</span></div>
+    <div class="pt-line"></div>
+    <div class="pt-t">머릿속 그림을 꺼내다</div>
+    <div class="pt-q">"잘 되다가, 갑자기 화면이<br>통째로 하얗게 변했다."</div>
+  </section>
+
+  <!-- ══ 12 · 4장 ══ -->
+  <section class="page" data-screen-label="4장">
+    <div class="run"><span>제2부 · 머릿속 그림을 꺼내다</span><span class="r2">04</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">4</span><span class="c3">말이 곧 그림이 되던 순간</span></div>
+    <p class="lead">첫날 아침, 내 머릿속에는 또렷한 그림이 있었다. 화면 가운데에 토론 카드가 쭉 늘어서 있고, 카드마다 파란 막대와 빨간 막대가 서로 밀고 당긴다. 문제는 단 하나였다. 그 그림이 아직 머릿속에만 있다는 것.</p>
+    <p>나는 그 그림을 말로 옮겼다. <span class="em">"카드 위에 토론 제목을 크게 쓰고, 그 아래에 찬성 몇 퍼센트, 반대 몇 퍼센트를 막대로 보여 줘. 찬성은 파랑, 반대는 빨강으로."</span> 그리고 잠시 뒤, 정말로 화면에 카드가 떠올랐다. 내 머릿속 그림이 처음으로 화면 밖으로 나온 순간이었다. 나는 나도 모르게 소리를 질렀다.</p>
+    <p>물론 한 번에 예쁘게 되진 않았다. 글씨는 너무 작았고, 막대는 어딘가 어색했다. 그래서 나는 계속 말했다. "조금 더 크게." "사이를 띄워 줘." "급상승한 토론에는 불꽃 표시를 달자." 말로 고치고, 보고, 또 고쳤다.</p>
+    <p>그날 나는 알았다. <span class="em-r">코딩은 마법 주문을 외우는 게 아니라, 내가 원하는 걸 또박또박 설명해 나가는 대화</span>라는 걸. 설명이 분명할수록 화면은 내 그림에 가까워졌다. 그리고 나는 점점 그 대화에 능숙해지고 있었다.</p>
+    <div class="note"><span class="nl">첫날의 발견</span>머릿속 그림을 말로 설명할 수 있으면, 그 그림은 <b>이미 절반쯤 완성된 것</b>이었다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 12 —</div>
+  </section>
+
+  <!-- ══ 13 · 5장 ══ -->
+  <section class="page" data-screen-label="5장">
+    <div class="run"><span>제2부 · 머릿속 그림을 꺼내다</span><span class="r2">05</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">5</span><span class="c3">화면이 하얗게 변했다</span></div>
+    <p class="lead">신나게 만들던 도중이었다. 작은 걸 하나 고치고 화면을 확인했는데, 카드도, 막대도, 글씨도, 전부 사라졌다. 화면은 그냥 하얬다. 텅 빈, 처음의 그 하얀 화면으로 돌아가 버린 것이다. 가슴이 철렁 내려앉았다.</p>
+    <p>분명 방금 전까지 멀쩡했는데. 내가 대체 뭘 망가뜨린 거지? 머릿속이 새하얘졌다. 한참을 멍하니 보다가, 짝꿍에게 물었다. 답은 어이없을 만큼 작았다. 코드 한 줄에서 <span class="em">따옴표 짝이 하나 안 맞았던 것</span>이다.</p>
+    <p>점 하나, 따옴표 하나. 사람한테라면 "대충 알아들어" 하고 넘어갈 일이었다. 그런데 컴퓨터는 봐주는 법이 없었다. 글자 하나가 어긋나면 전체가 멈춰 버렸다. 처음엔 그게 야속했지만, 곧 그게 컴퓨터의 정직함이라는 걸 알게 됐다.</p>
+    <p>그날 이후 나는 습관 하나를 들였다. <span class="em-r">조금 만들고, 곧바로 확인하기.</span> 한꺼번에 많이 바꿔 놓으면, 고장 났을 때 어디가 문제인지 찾기가 너무 힘들었다. 작게 한 걸음씩 가는 게 답답해 보여도, 결국엔 그게 훨씬 빨랐다.</p>
+    <div class="note r"><span class="nl">첫 번째 벽</span>큰 실패는 대개 <b>아주 작은 어긋남</b>에서 온다. 그래서 자주 멈춰 서서 확인하는 사람이 멀리 간다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 13 —</div>
+  </section>
+
+  <!-- ══ 14 · 6장 ══ -->
+  <section class="page" data-screen-label="6장">
+    <div class="run"><span>제2부 · 머릿속 그림을 꺼내다</span><span class="r2">06</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">6</span><span class="c3">에러는 친절한 쪽지였다</span></div>
+    <p class="lead">처음 빨간 글씨로 '에러'가 떴을 때, 나는 내가 혼나는 줄 알았다. 컴퓨터가 "너 또 틀렸어" 하고 화내는 것 같았다. 그래서 에러가 뜨면 얼른 화면을 닫아 버리고 싶었다. 무서웠다.</p>
+    <p>그런데 며칠 지나며 생각이 완전히 바뀌었다. 에러는 나를 혼내는 게 아니었다. <span class="em">"여기 이 줄, 이 부분이 이상해요"</span> 하고 알려 주는, 아주 친절한 쪽지였다. 에러가 없었다면 나는 어디가 틀렸는지조차 영영 몰랐을 것이다.</p>
+    <p>그렇게 생각하니 에러가 더는 무섭지 않았다. 오히려 반가웠다. 빨간 글씨를 차분히 읽고, 그 줄을 찾아가 고치면 화면이 다시 살아났다. 문제를 만났을 때 도망치지 않고 똑바로 읽는 것. 그게 가장 중요한 기술이었다.</p>
+    <p>나는 이 마음가짐을 코딩 밖에서도 쓰기로 했다. 시험을 틀려도, 친구와 다퉈도, 그건 나를 혼내는 게 아니라 <span class="em-r">"여기를 고치면 더 나아져요"</span> 하는 쪽지일 뿐이라고. 실패를 대하는 법을 바꾸자, 무서운 게 훨씬 줄어들었다.</p>
+    <div class="note g"><span class="nl">실패를 대하는 법</span>에러는 적이 아니라 안내자였다. <b>똑바로 읽을 용기</b>만 있으면, 모든 실패는 다음 한 걸음을 가리키고 있었다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 14 —</div>
+  </section>
+
+  <!-- ══ 15 · 3부 표지 ══ -->
+  <section class="page part" data-screen-label="제3부">
+    <div class="pt-k">PART THREE</div>
+    <div class="pt-n">3<span class="dot">.</span></div>
+    <div class="pt-line"></div>
+    <div class="pt-t">앱이 숨을 쉬기 시작했다</div>
+    <div class="pt-q">"멀리 있는 누군가가 누른 버튼이,<br>내 화면에서 살아 움직였다."</div>
+  </section>
+
+  <!-- ══ 16 · 7장 ══ -->
+  <section class="page" data-screen-label="7장">
+    <div class="run"><span>제3부 · 앱이 숨을 쉬기 시작했다</span><span class="r2">07</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">7</span><span class="c3">기억하는 앱</span></div>
+    <p class="lead">사실 처음의 토론하자는 '가짜'였다. 내가 미리 적어 둔 토론만 보일 뿐, 누가 투표를 해도 저장되지 않았다. 새로고침을 하면 모든 게 사라졌다. 예쁜 그림일 뿐, 아무것도 기억하지 못하는 앱이었다.</p>
+    <p>그래서 다음 목표는 분명했다. <span class="em-r">진짜로 기억하게 만들기.</span> 나는 인터넷 너머에 <strong>서버</strong>를 붙였다. 서버는 거대한 공책 같은 것이다. 누군가 찬성을 누르면, 그 표가 공책에 적히고, 다른 사람 화면에도 똑같이 보인다.</p>
+    <p>이게 처음 되는 순간, 앱이 비로소 '살아 있는' 느낌이 들었다. 내 휴대폰에서 누른 표가 사라지지 않고 남아 있었다. 다른 기기에서 열어도 그대로였다. 그 작은 변화가, 장난감과 진짜 서비스를 가르는 경계였다.</p>
+    <p>제일 어려웠던 건 보이지 않는 부분이었다. <span class="em">아무나 남의 글을 지우면 안 되니까,</span> "이건 되고 저건 안 돼"를 하나하나 규칙으로 정해 줘야 했다. 눈에 보이지 않는 일이라 제일 헷갈렸지만, 가장 중요한 일이기도 했다.</p>
+    <div class="note"><span class="nl">오늘의 깨달음</span>앱에서 진짜 어려운 건 화려한 화면이 아니라, <b>눈에 보이지 않는 규칙</b>이었다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 16 —</div>
+  </section>
+
+  <!-- ══ 17 · 8장 ══ -->
+  <section class="page" data-screen-label="8장">
+    <div class="run"><span>제3부 · 앱이 숨을 쉬기 시작했다</span><span class="r2">08</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">8</span><span class="c3">실시간이라는 마법</span></div>
+    <p class="lead">내가 이 앱에서 가장 자랑스러워하는 건 <span class="em">실시간</span>이다. 누가 댓글을 달면, 내가 가만히 있어도 그 댓글이 스르륵 올라온다. 투표 막대도 살아 있는 것처럼 움직인다. 화면 위에는 '지금 12명 참여 중' 같은 숫자도 떴다.</p>
+    <p>이걸 만들 때 정말 신기했다. 멀리 있는 누군가가 휴대폰으로 누른 게, 내 컴퓨터 화면에서 1초도 안 돼 움직이다니. 마치 보이지 않는 실로 사람들이 연결된 기분이었다. 화면 너머에 진짜 사람이 있다는 게 처음으로 실감 났다.</p>
+    <p>대신 욕심을 부리니 문제가 생겼다. 사람이 몰리면 서버에 너무 자주 물어봐서 화면이 느려졌다. 그래서 나는 꾀를 냈다. <span class="em">"몇 초에 한 번만 새로 확인하기"</span>처럼, 빠른 것과 아끼는 것 사이에서 균형을 잡았다.</p>
+    <p>완벽하게 빠른 것보다, <span class="em-r">충분히 빠르면서 오래 버티는 것</span>이 더 좋은 설계라는 걸 그때 배웠다. 무조건 더 좋은 것은 없었다. 상황에 맞게 적당한 선을 고르는 것, 그게 진짜 실력이었다.</p>
+    <div class="note g"><span class="nl">자랑하고 싶은 것</span>접속자 수, 분당 댓글 수, 실시간 랭킹 — 앱이 <b>살아 숨 쉬는 것처럼</b> 보이게 만든 작은 장치들.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 17 —</div>
+  </section>
+
+  <!-- ══ 18 · 9장 ══ -->
+  <section class="page" data-screen-label="9장">
+    <div class="run"><span>제3부 · 앱이 숨을 쉬기 시작했다</span><span class="r2">09</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">9</span><span class="c3">밤하늘을 닮은 화면</span></div>
+    <p class="lead">기능이 갖춰지니, 이제 예뻐 보이고 싶었다. 나는 밝고 하얀 화면보다 <span class="em">어두운 밤하늘 같은 화면</span>이 더 멋있다고 생각했다. 그래서 배경을 짙은 남색으로 깔고, 찬성은 파랑, 반대는 빨강으로 정했다.</p>
+    <p>색 하나도 그냥 고르지 않았다. 너무 쨍하면 눈이 아프고, 너무 흐리면 잘 안 보였다. 짝꿍과 함께 수십 번 색을 바꿔 보며 딱 맞는 값을 찾았다. 로고 글씨만큼은 크고 단단한 글씨체로 정해, 눈에 확 들어오게 했다.</p>
+    <p>작은 디테일에도 신경 썼다. 카드에 마우스를 올리면 살짝 떠오르고, 댓글이 올라올 땐 부드럽게 나타난다. 이런 건 없어도 앱은 굴러간다. 하지만 있으면 <span class="em">"아, 정성 들였구나"</span> 하는 느낌을 준다. 나는 그 느낌이 좋았다.</p>
+    <p>디자인을 하며 배운 건, 화려함과 깔끔함은 다르다는 것이었다. 나는 화려한 쪽보다 <span class="em-r">꼭 필요한 것만 남긴 깔끔한 쪽</span>을 골랐다. 비우는 것이 채우는 것만큼 어렵다는 걸, 색과 여백을 만지며 알게 됐다.</p>
+    <div class="note"><span class="nl">디자인 원칙</span>화려한 것보다 <b>깔끔한 것</b>. 꼭 필요한 것만 남기고, 나머지는 과감히 비웠다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 18 —</div>
+  </section>
+
+  <!-- ══ 19 · 10장 ══ -->
+  <section class="page" data-screen-label="10장">
+    <div class="run"><span>제3부 · 앱이 숨을 쉬기 시작했다</span><span class="r2">10</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">10</span><span class="c3">나쁜 말을 막는 사람</span></div>
+    <p class="lead">사람들이 모이는 곳에는 꼭 나쁜 말도 생긴다. 욕을 하는 사람, 같은 글을 도배하는 사람. 토론하자가 진짜 서비스가 되려면, 이런 걸 막을 방법이 꼭 필요했다. 즐거운 다툼은 남기고, 상처 주는 말은 걸러 내야 했다.</p>
+    <p>그래서 나는 <span class="em">관리자 페이지</span>를 따로 만들었다. 비밀번호를 넣어야 들어갈 수 있고, 신고가 쌓인 댓글을 가려 버리는 기능, 규칙을 어긴 사람을 잠시 못 쓰게 하는 기능을 넣었다. 비밀번호도 그냥 두면 위험해서, <span class="em">알아볼 수 없는 암호로 바꿔</span> 저장했다.</p>
+    <p>이 부분을 만들며 느낀 게 있다. 앱을 만든다는 건 멋진 기능만 만드는 게 아니라, <span class="em-r">나쁜 일이 생길 때를 미리 대비하는 것</span>이기도 하다는 것. 어른들이 왜 그렇게 '안전'을 강조하는지 조금 알 것 같았다.</p>
+    <p>내 앱을 쓰는 사람이 상처받지 않게 지키는 것. 그것도 만든 사람의 몫이었다. 토론은 뜨겁되 사람은 다치지 않는 곳. 나는 토론하자가 그런 곳이 되기를 바랐고, 그러려면 눈에 안 띄는 안전장치를 부지런히 만들어 둬야 했다.</p>
+    <div class="note r"><span class="nl">만드는 사람의 책임</span>멋진 기능만큼 중요한 건, <b>나쁜 일이 생기기 전에 막아 두는 일</b>이었다. 그것도 만든 사람의 몫이다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 19 —</div>
+  </section>
+
+  <!-- ══ 20 · 4부 표지 ══ -->
+  <section class="page part" data-screen-label="제4부">
+    <div class="pt-k">PART FOUR</div>
+    <div class="pt-n">4<span class="dot">.</span></div>
+    <div class="pt-line"></div>
+    <div class="pt-t">세상으로 내보내다</div>
+    <div class="pt-q">"만드는 것과 알리는 것은,<br>완전히 다른 공부였다."</div>
+  </section>
+
+  <!-- ══ 21 · 11장 ══ -->
+  <section class="page" data-screen-label="11장">
+    <div class="run"><span>제4부 · 세상으로 내보내다</span><span class="r2">11</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">11</span><span class="c3">다시 오게 하는 종소리</span></div>
+    <p class="lead">앱은 거의 완성됐지만, 한 가지가 자꾸 마음에 걸렸다. 사람들이 한 번 보고 나면 다시 안 올 것 같았다. 아무리 잘 만들어도, 잊혀지면 없는 것과 같다. <span class="em">"다시 오게 만들 방법"</span>이 필요했다. 답은 알림이었다.</p>
+    <p>화면 위쪽에 <strong>종 모양 버튼</strong>을 달았다. 누가 내 의견에 공감하면, 내가 쓴 토론에 새 댓글이 달리면, 빨간 숫자가 뜬다. 종을 누르면 알림이 쭉 펼쳐진다. 만들고 나니 진짜 앱 같아서 뿌듯했다.</p>
+    <p>욕심이 나서 <span class="em">"앱을 꺼 놓아도 오는 진짜 푸시 알림"</span>까지 도전했다. 그런데 만들다 보니 서버에 부담만 커지고 점점 복잡해졌다. 한참 고민하다, 나는 그걸 <span class="em-r">과감히 접었다.</span></p>
+    <p>아쉬웠지만 후회하지 않는다. 더하는 것만큼 <strong>빼는 결정</strong>도 중요하다는 걸 그때 배웠으니까. 욕심을 부려 다 넣으면 오히려 무너진다. 지금 꼭 필요한 것과, 나중에 해도 되는 것을 구분하는 것. 그것도 만드는 사람의 중요한 판단이었다.</p>
+    <div class="note"><span class="nl">오늘 만든 것</span>벨 알림 · 알림 패널 · 공감과 새 의견과 공지를 실시간으로 알려 주는 장치들.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 21 —</div>
+  </section>
+
+  <!-- ══ 22 · 12장 ══ -->
+  <section class="page" data-screen-label="12장">
+    <div class="run"><span>제4부 · 세상으로 내보내다</span><span class="r2">12</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">12</span><span class="c3">텅 빈 방에 손님을 부르다</span></div>
+    <p class="lead">완성된 앱을 켰는데, 뭔가 허전했다. 토론이 몇 개 없으니 썰렁했다. 생각해 보니 당연한 일이었다. <span class="em">처음 온 사람이 텅 빈 앱을 보면, 둘러보지도 않고 바로 나가 버린다.</span> 아무도 없는 가게에는 들어가기 망설여지는 것처럼.</p>
+    <p>그래서 나는 진짜로 의견이 <span class="em-r">반반으로 갈리는</span> 주제들을 정성껏 준비했다. "주 4일제를 도입해야 한다", "확률형 아이템을 금지해야 한다" 같은 것들. 너무 뻔한 '부먹 찍먹'은 일부러 뺐다. 진짜로 싸울 만한 것만 골랐다.</p>
+    <p>여기서도 배운 게 있다. 좋은 토론 주제는 <span class="em">한쪽이 명백히 옳으면 안 된다</span>는 것. 양쪽 다 그럴듯해야 사람들이 오래 떠든다. 주제를 고르며, 나도 모르게 세상일에 대해 평소보다 훨씬 더 많이 생각하게 됐다.</p>
+    <p>가게도 첫 손님이 있어야 다음 손님이 온다. 앱도 똑같았다. 사람들이 처음 봤을 때 "오, 재밌겠다" 하고 머물 수 있도록, 나는 그 <strong>첫 풍경</strong>을 부지런히 차렸다. 텅 빈 방을 손님 맞을 준비가 된 방으로 바꾸는 일이었다.</p>
+    <div class="note g"><span class="nl">콜드 스타트</span>아무도 없는 곳엔 아무도 오지 않는다. 그래서 <b>첫 풍경</b>을 정성껏 차리는 일이 무엇보다 중요했다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 22 —</div>
+  </section>
+
+  <!-- ══ 23 · 13장 ══ -->
+  <section class="page" data-screen-label="13장">
+    <div class="run"><span>제4부 · 세상으로 내보내다</span><span class="r2">13</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">13</span><span class="c3">광고비 0원의 비밀</span></div>
+    <p class="lead">앱을 만든 것보다 더 어려운 질문이 남아 있었다. <span class="em">"이걸 어떻게 사람들한테 알리지?"</span> 나는 광고에 쓸 돈이 한 푼도 없었다. 그런데 곰곰이 생각해 보니, 답은 의외로 단순한 곳에 있었다.</p>
+    <p>토론하자의 손님들은 <span class="em-r">이미 어딘가에서 다투고 있었다.</span> 축구 커뮤니티, 게임 게시판, 연예 이야기가 오가는 곳. 그 사람들에게 "이거 투표로 끝장 봅시다" 하고 링크 하나를 던지면 되는 거였다. 광고가 아니라 <strong>주제</strong>가 사람을 부른다.</p>
+    <p>그리고 공유할 때 <span class="em">"지금 찬성 53퍼센트, 당신은?"</span>처럼 결과가 궁금하게 만들면, 사람들이 눌러본다는 것도 알게 됐다. 사람의 마음은 빈칸을 채우고 싶어 한다. 그 마음을 건드리는 한 줄이, 광고 백 개보다 셌다.</p>
+    <p>만드는 것과 알리는 것은 완전히 다른 공부였다. 좋은 걸 만들었다고 저절로 알려지지는 않았다. 어떻게 사람들의 마음에 닿을지 고민하는 것까지가 '만들기'의 일부였다. 둘 다 어려웠지만, 둘 다 재미있었다.</p>
+    <div class="note"><span class="nl">마케팅 한 줄</span>이 앱은 광고로 크는 게 아니라, <b>뜨거운 주제 하나가 링크를 타고 퍼지며</b> 큰다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 23 —</div>
+  </section>
+
+  <!-- ══ 24 · 14장 ══ -->
+  <section class="page" data-screen-label="14장">
+    <div class="run"><span>제4부 · 세상으로 내보내다</span><span class="r2">14</span></div>
+    <div class="chtag"><span class="c1">CHAPTER</span><span class="c2">14</span><span class="c3">"그거 네가 만들었어?"</span></div>
+    <p class="lead">드디어 토론하자를 세상에 내놓는 날. 주소창에 내 앱 주소를 치자, 내가 만든 화면이 진짜 인터넷 위에 떠올랐다. 이제 나뿐 아니라 누구나 들어올 수 있었다. 그 순간의 기분은 말로 다 설명하기 어렵다.</p>
+    <p>가장 잊을 수 없는 건 사람들의 반응이었다. 친구도, 어른도, 화면을 보다가 고개를 들고 물었다. <span class="em">"이거… 그거 정말 네가 만들었어?"</span> 눈이 동그래진 그 얼굴들이, 며칠간의 고생을 한 번에 보상해 줬다.</p>
+    <p>그때 알았다. 무언가를 만든다는 건 결국 누군가에게 가닿는 일이라는 걸. 내 머릿속에만 있던 그림이, 이제 모르는 사람의 손가락 끝에서 움직이고 있었다. 내가 만든 작은 세상에 사람들이 들어와 떠들고 있었다.</p>
+    <p>나는 거창한 천재가 아니다. 그저 호기심 하나를 끝까지 따라가 본 평범한 5학년일 뿐이다. 그런데 그 평범한 호기심이, <span class="em-r">진짜로 굴러가는 무언가</span>가 되어 세상에 나왔다. 시작에 내가 있었다는 게, 지금도 나는 조금 자랑스럽다.</p>
+    <div class="note g"><span class="nl">출시의 순간</span>"네가 만들었어?"라는 그 한마디가, 며칠간의 모든 막힘과 하얀 화면을 <b>한 번에 보상</b>해 주었다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 24 —</div>
+  </section>
+
+  <!-- ══ 25 · 5부 표지 ══ -->
+  <section class="page part" data-screen-label="제5부">
+    <div class="pt-k">PART FIVE</div>
+    <div class="pt-n">5<span class="dot">.</span></div>
+    <div class="pt-line"></div>
+    <div class="pt-t">남은 이야기</div>
+    <div class="pt-q">"무언가를 만든다는 건,<br>생각보다 훨씬 가까운 일이었다."</div>
+  </section>
+
+  <!-- ══ 26 · 숫자로 보는 며칠 ══ -->
+  <section class="page" data-screen-label="숫자로 보는 며칠">
+    <div class="run"><span>제5부 · 남은 이야기</span><span class="r2">기록</span></div>
+    <h2 class="chap">숫자로 보는 며칠</h2>
+    <div class="chap-sub">작은 손으로 쌓아 올린 것들</div>
+    <p>지나고 나서 내가 만든 것을 숫자로 세어 보았다. 대단한 숫자는 아니지만, 하나하나가 내가 직접 고민하고 결정한 흔적이라 나에게는 특별하다.</p>
+    <div class="nums">
+      <div class="numc"><div class="nv r">0</div><div class="nl">빌려 쓴 외부 부품</div><div class="nd">처음부터 끝까지 내 손으로</div></div>
+      <div class="numc"><div class="nv">6</div><div class="nl">토론 카테고리</div><div class="nd">정치·축구·연예·게임·사회·경제</div></div>
+      <div class="numc"><div class="nv g">2</div><div class="nl">단 두 개의 편</div><div class="nd">찬성(파랑)과 반대(빨강)</div></div>
+      <div class="numc"><div class="nv">∞</div><div class="nl">짝꿍과 나눈 대화</div><div class="nd">묻고, 고치고, 또 물었다</div></div>
+    </div>
+    <p>가장 마음에 드는 숫자는 단연 <span class="em-r">0</span>이다. 외부 부품 0개. 쉬운 길을 마다하고 끝까지 내 손으로 만들었다는 증거이기 때문이다. 그리고 그 옆의 <span class="em">2</span>. 수많은 선택지 중에 딱 둘만 남긴 그 단순함이, 이 앱을 이 앱답게 만들었다.</p>
+    <p>숫자로 적고 보니 새삼 느낀다. 결국 이 모든 건 거창한 장비가 아니라, <strong>"해 보자"는 마음 하나</strong>에서 시작됐다는 것을. 그 마음만 있으면, 나머지 숫자는 한 칸씩 채워 나갈 수 있었다.</p>
+    <div class="note"><span class="nl">기록을 남기며</span>숫자는 작아도 괜찮다. 중요한 건 그 숫자 하나하나가 <b>내가 직접 내린 결정</b>이라는 사실이다.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 26 —</div>
+  </section>
+
+  <!-- ══ 27 · 내가 진짜 배운 것 ══ -->
+  <section class="page" data-screen-label="내가 배운 것">
+    <div class="run"><span>제5부 · 남은 이야기</span><span class="r2">배움</span></div>
+    <h2 class="chap">내가 진짜 배운 것</h2>
+    <div class="chap-sub">코드 너머에 남은 것들</div>
+    <p class="lead">이 모든 일이 끝나고, 내 손에 남은 건 앱 하나만이 아니었다. 며칠 사이에 내 안에서 더 크게 자란 것들이 있었다. 그것들을 적어 두지 않으면 잊어버릴 것 같아, 여기에 정리해 둔다.</p>
+    <ul class="bk">
+      <li><b>가장 어려운 건 코드가 아니다.</b> 내가 무엇을 원하는지 정확히 아는 것, 그리고 그걸 또박또박 설명하는 것이 진짜 어려운 일이었다.</li>
+      <li class="r"><b>작게, 자주 확인하라.</b> 한 번에 많이 바꾸면 어디서 망가졌는지 못 찾는다. 작은 걸음이 답답해도 결국 더 빠르다.</li>
+      <li><b>에러는 친절한 쪽지다.</b> 실패는 나를 혼내는 게 아니라, 다음에 고칠 곳을 알려 주는 안내였다.</li>
+      <li class="r"><b>빼는 것도 만드는 일이다.</b> 욕심내 다 넣는 것보다, 꼭 필요한 하나를 남기는 결정이 더 어렵고 더 중요했다.</li>
+    </ul>
+    <p>무엇보다 크게 배운 건 이것이다. <span class="em-r">무언가를 만드는 일은 생각보다 훨씬 가까운 곳에 있었다.</span> 멀리 있는 천재들만의 일이 아니었다. 호기심 하나와 끝까지 가 보려는 마음이면, 누구나 시작할 수 있는 일이었다.</p>
+    <div class="note g"><span class="nl">가장 큰 배움</span>나는 이제 안다. <b>모르는 일 앞에서 도망치지 않고 한 걸음 내딛는 것</b>, 그것이 모든 것의 시작이라는 걸.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 27 —</div>
+  </section>
+
+  <!-- ══ 28 · 에필로그 ══ -->
+  <section class="page" data-screen-label="에필로그">
+    <div class="run"><span>토론하자, 그 시작에 있던 초등학생</span><span class="r2">에필로그</span></div>
+    <h2 class="chap">다시, 하얀 화면 앞에서</h2>
+    <div class="chap-sub">EPILOGUE · 그리고 다음 이야기</div>
+    <p class="lead">이 책의 첫 장에서, 나는 하얀 화면이 무섭지 않고 가슴이 뛰었다고 적었다. 모든 일을 끝낸 지금, 나는 다시 하얀 화면 앞에 앉아 있다. 그런데 이제 그 빈 화면이 예전과는 완전히 다르게 보인다.</p>
+    <p>전에는 막연한 설렘이었다면, 지금의 설렘에는 자신감이 섞여 있다. 나는 안다. 저 빈 화면이 아무리 막막해 보여도, <span class="em">첫 줄 하나만 적으면 거기서부터 길이 생긴다는 것</span>을. 한 걸음씩 가면, 머릿속 그림은 결국 화면 밖으로 나온다는 것을.</p>
+    <p>토론하자는 끝이 아니라 시작이다. 다음엔 또 무엇을 만들지 벌써 머릿속에 그림이 그려진다. 그게 무엇이든, 나는 이번처럼 작게 시작하고, 자주 멈춰 확인하고, 에러라는 쪽지를 차분히 읽으며 나아갈 것이다.</p>
+    <p>혹시 이 책을 읽는 네가 무언가 만들고 싶은 마음을 품고 있다면, 꼭 말해 주고 싶다. <span class="em-r">그 마음이 바로 시작이라고.</span> 거창한 준비도, 천재적인 재능도 필요 없다. 필요한 건 호기심 하나와, 빈 화면 앞에서 첫 줄을 적어 볼 작은 용기뿐이다. 그 시작에, 언젠가 네가 있기를.</p>
+    <div class="note"><span class="nl">마지막 한 줄</span>세상에서 가장 멀어 보이던 일도, 알고 보면 <b>첫 줄 하나</b>에서 시작된다. 그러니 일단, 한 줄을 적어 보자.</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 28 —</div>
+  </section>
+
+  <!-- ══ 29 · 맺음 ══ -->
+  <section class="page closing" data-screen-label="맺음">
+    <div class="spacer"></div>
+    <div class="end">끝, 그리고 시작</div>
+    <div class="quote" style="margin-top:6px;">"나는 거창한 천재가 아니다.<br>그저 호기심 하나를 끝까지<br>따라가 본 초등학생이었다.<br><span style="color:var(--blue)">그 시작에, 내가 있었다.</span>"
+      <span class="by">— 서주원</span>
+    </div>
+    <div class="orn">✦ ✦ ✦</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 29 —</div>
+  </section>
+
+  <!-- ══ 30 · 콜로폰 ══ -->
+  <section class="page closing" data-screen-label="콜로폰">
+    <div class="spacer"></div>
+    <div class="colo">
+      <div class="t">토론하자, 그 시작에 있던 초등학생</div>
+      어느 5학년이 호기심 하나로 앱을 만든 이야기<br><br>
+      <b>글</b> · 서주원<br>
+      <b>만든 앱</b> · 토론하자 (실시간 찬반 토론 플랫폼)<br>
+      <b>함께한 짝꿍</b> · AI<br>
+      <b>펴낸 해</b> · 2026<br><br>
+      <span style="color:var(--ink-faint);">이 책의 모든 이야기는<br>실제로 있었던 일을 바탕으로 합니다.</span>
+    </div>
+    <div class="orn" style="margin-top:30px;">✦</div>
+    <div class="spacer"></div>
+    <div class="pgnum">— 30 —</div>
+  </section>
+
+</div>
+</body>
+</html>

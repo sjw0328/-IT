@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>토론하자 · 런칭 마케팅 전략</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  :root{
+    --bg:#0F1217; --bg-deep:#0A0C10; --surface:#161B22; --surface-2:#1C232D; --surface-3:#252E3A;
+    --border:rgba(255,255,255,.06); --border-2:rgba(255,255,255,.11);
+    --text:#F4F6FA; --subtext:#9AA4B2; --muted:#626C7A;
+    --a:#4D82F3; --a-bright:#7AA5FF; --a-text:#AAC5FF; --a-soft:rgba(77,130,243,.12); --a-border:rgba(77,130,243,.38);
+    --b:#ED5470; --b-bright:#F8859A; --b-soft:rgba(237,84,112,.12); --b-border:rgba(237,84,112,.38);
+    --live:#2FD37A; --warn:#F2B23C;
+    --cat-politics:#A99BF5; --cat-soccer:#3FD6A0; --cat-ent:#F58BBE; --cat-game:#45D2E0; --cat-society:#F2C45C; --cat-econ:#36CFC0;
+    --display:'Black Han Sans',sans-serif;
+    --body:'Pretendard',-apple-system,system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.6;
+    -webkit-font-smoothing:antialiased;padding:48px 20px 80px;}
+  .wrap{max-width:1000px;margin:0 auto;}
+  .tnum{font-variant-numeric:tabular-nums;}
+
+  /* header */
+  .top{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;
+    padding-bottom:26px;margin-bottom:38px;border-bottom:1px solid var(--border-2);position:relative;}
+  .top::after{content:'';position:absolute;left:0;bottom:-1px;width:160px;height:2px;
+    background:linear-gradient(90deg,var(--a),var(--b));}
+  .logo{font-family:var(--display);font-size:40px;letter-spacing:-1px;line-height:1;}
+  .logo .l1{color:var(--text);} .logo .l2{color:var(--a-bright);} .logo .dot{color:var(--b);}
+  .top .eyebrow{font-size:12px;font-weight:800;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+  .top h1{font-size:21px;font-weight:800;letter-spacing:-.4px;margin-top:4px;}
+  .top .spacer{flex:1;}
+  .top .stamp{font-size:12.5px;color:var(--subtext);text-align:right;line-height:1.5;}
+  .top .stamp b{color:var(--text);}
+
+  /* thesis */
+  .thesis{background:linear-gradient(150deg,var(--surface),var(--bg-deep));
+    border:1px solid var(--border-2);border-radius:20px;padding:34px 38px;margin-bottom:40px;position:relative;overflow:hidden;}
+  .thesis::before{content:'';position:absolute;top:-40%;right:-6%;width:280px;height:280px;
+    background:radial-gradient(circle,var(--a-soft),transparent 70%);}
+  .thesis .k{font-size:13px;font-weight:800;letter-spacing:1px;color:var(--a-text);text-transform:uppercase;margin-bottom:14px;position:relative;}
+  .thesis p{font-size:27px;font-weight:800;letter-spacing:-.6px;line-height:1.45;position:relative;text-wrap:balance;}
+  .thesis p .hl{color:var(--a-bright);} .thesis p .hl-b{color:var(--b-bright);}
+  .thesis .sub{font-size:15px;font-weight:500;color:var(--subtext);margin-top:16px;max-width:760px;position:relative;text-wrap:pretty;}
+
+  .sec-label{display:flex;align-items:center;gap:12px;margin:0 0 20px;}
+  .sec-label .n{font-family:var(--display);font-size:15px;color:var(--b);letter-spacing:1px;}
+  .sec-label h2{font-size:18px;font-weight:800;letter-spacing:-.3px;}
+  .sec-label .line{flex:1;height:1px;background:var(--border);}
+  section{margin-bottom:46px;}
+
+  /* steps grid */
+  .steps{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .step{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px 24px;
+    transition:border-color .2s,transform .2s;}
+  .step:hover{border-color:var(--border-2);transform:translateY(-2px);}
+  .step .sh{display:flex;align-items:center;gap:11px;margin-bottom:11px;}
+  .step .badge{font-family:var(--display);font-size:18px;width:34px;height:34px;flex:0 0 auto;border-radius:10px;
+    display:grid;place-items:center;background:var(--a-soft);color:var(--a-bright);border:1px solid var(--a-border);}
+  .step.bb .badge{background:var(--b-soft);color:var(--b-bright);border-color:var(--b-border);}
+  .step h3{font-size:15.5px;font-weight:800;letter-spacing:-.2px;}
+  .step p{font-size:13.5px;color:var(--subtext);text-wrap:pretty;}
+  .step .tip{font-size:12.5px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px dashed var(--border-2);}
+  .step .tip b{color:var(--live);font-weight:700;}
+  .full{grid-column:1 / -1;}
+
+  /* channel table */
+  table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);
+    border-radius:14px;overflow:hidden;font-size:13.5px;}
+  th{text-align:left;font-size:11.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;
+    padding:13px 18px;background:var(--surface-2);}
+  td{padding:13px 18px;border-top:1px solid var(--border);vertical-align:top;}
+  .cat-pill{display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:12.5px;padding:3px 10px;border-radius:999px;white-space:nowrap;}
+  .cat-pill .d{width:7px;height:7px;border-radius:50%;}
+  td.ch{color:var(--text);font-weight:600;}
+  td.note{color:var(--subtext);}
+
+  /* viral loop */
+  .loop{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;}
+  .loop .node{flex:1;min-width:150px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 18px;}
+  .loop .node .lk{font-size:11.5px;font-weight:800;letter-spacing:.4px;color:var(--a-text);text-transform:uppercase;margin-bottom:7px;}
+  .loop .node h4{font-size:14.5px;font-weight:800;margin-bottom:5px;letter-spacing:-.2px;}
+  .loop .node p{font-size:12.5px;color:var(--subtext);text-wrap:pretty;}
+  .loop .arrow{display:grid;place-items:center;color:var(--muted);font-size:20px;flex:0 0 auto;}
+
+  /* calendar */
+  .cal{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .week{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;}
+  .week .wk{font-family:var(--display);font-size:13px;letter-spacing:1px;color:var(--warn);margin-bottom:3px;}
+  .week .goal{font-size:14.5px;font-weight:800;margin-bottom:14px;letter-spacing:-.2px;text-wrap:balance;}
+  .week ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+  .week li{font-size:12.5px;color:var(--subtext);padding-left:16px;position:relative;text-wrap:pretty;}
+  .week li::before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--a);}
+  .week:nth-child(2) li::before{background:var(--cat-soccer);}
+  .week:nth-child(3) li::before{background:var(--cat-ent);}
+  .week:nth-child(4) li::before{background:var(--b);}
+
+  /* kpi */
+  .kpis{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .kpi{background:linear-gradient(150deg,var(--surface),var(--bg-deep));border:1px solid var(--border-2);border-radius:16px;padding:24px 26px;}
+  .kpi .kl{font-size:13px;font-weight:800;color:var(--subtext);margin-bottom:8px;}
+  .kpi .kv{font-family:var(--display);font-size:30px;letter-spacing:-.5px;line-height:1.15;}
+  .kpi .kv .u{color:var(--a-bright);} .kpi:nth-child(2) .kv .u{color:var(--b-bright);}
+  .kpi .kd{font-size:12.5px;color:var(--muted);margin-top:10px;text-wrap:pretty;}
+
+  .foot{margin-top:54px;padding-top:22px;border-top:1px solid var(--border);
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);}
+  .foot b{color:var(--subtext);font-weight:700;}
+
+  @media (max-width:720px){
+    .steps,.cal,.kpis{grid-template-columns:1fr;}
+    .thesis p{font-size:21px;} .thesis{padding:26px 24px;}
+    body{padding:30px 14px 60px;}
+    .loop .arrow{transform:rotate(90deg);}
+  }
+  @media print{
+    body{background:#fff;color:#11151b;padding:0;}
+    .step,.week,.kpi,table,.thesis,.loop .node{break-inside:avoid;}
+    .thesis::before,.top::after{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <span class="logo"><span class="l1">토론</span><span class="l2">하자</span><span class="dot">.</span></span>
+    <div>
+      <div class="eyebrow">Go-to-Market Plan</div>
+      <h1>런칭 마케팅 전략</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="stamp">찬반이 갈리는 실시간 토론 플랫폼<br><b>광고 예산 ₩0 에서 시작하는 4주 플랜</b></div>
+  </header>
+
+  <div class="thesis">
+    <div class="k">핵심 명제</div>
+    <p>이 앱은 광고가 아니라 <span class="hl">주제</span>로 큰다.<br>충분히 뜨거운 주제 하나가 <span class="hl-b">링크</span>로 퍼지며 사람을 데려온다.</p>
+    <div class="sub">그래서 전략의 90%는 "어떻게 알릴까"가 아니라 <b style="color:var(--text)">"무슨 주제를 언제 띄울까"</b>입니다. 사람을 사오는 대신, 이미 어딘가에서 싸우고 있는 사람들에게 "여기서 투표로 끝장 보자"는 무대를 던집니다.</div>
+  </div>
+
+  <section>
+    <div class="sec-label"><span class="n">01</span><h2>5가지 핵심 전략</h2><span class="line"></span></div>
+    <div class="steps">
+      <div class="step">
+        <div class="sh"><span class="badge">1</span><h3>씨앗 주제 50개를 먼저 깐다</h3></div>
+        <p>빈 피드는 첫 방문자 100% 이탈. 출시 전 <b style="color:var(--text)">진짜 50:50 으로 갈리는</b> 주제를 카테고리별로 미리 채워 둡니다. 식상한 "부먹 vs 찍먹"이 아니라 지금 커뮤니티가 싸우는 주제.</p>
+        <div class="tip"><b>준비됨</b> · <code>topics-seed.sql</code> — 접전 주제 50개 + 투표 시드 즉시 투입</div>
+      </div>
+      <div class="step bb">
+        <div class="sh"><span class="badge">2</span><h3>싸움터에 정확히 꽂는다</h3></div>
+        <p>유튜브 광고에 돈 쓰지 않습니다. 토론하자의 청중은 이미 펨코·디시·더쿠·인벤에서 싸우는 중. 그날 가장 뜨거운 주제를 만들어 관련 글에 자연스럽게 던집니다.</p>
+        <div class="tip"><b>원칙</b> · 광고처럼 보이면 죽는다. 진짜 토론 참여자처럼 던질 것</div>
+      </div>
+      <div class="step">
+        <div class="sh"><span class="badge">3</span><h3>"결과가 궁금한" 공유를 만든다</h3></div>
+        <p>공유 카드에 실시간 퍼센트("현재 찬성 53% : 반대 47%, 당신은?")를 박으면 클릭률이 뜁니다. 정적 이미지보다 <b style="color:var(--text)">지금 판세</b>를 보여주는 게 핵심.</p>
+        <div class="tip"><b>심리</b> · 사람은 자기 의견이 소수일 때 더 공유한다</div>
+      </div>
+      <div class="step">
+        <div class="sh"><span class="badge">4</span><h3>"오늘의 토론"으로 습관화</h3></div>
+        <p>일회성 방문은 성장하지 않습니다. 매일 오전 그날의 빅 이슈 1개를 PWA 알림으로 띄워 "오늘의 토론하자" 루틴을 만듭니다.</p>
+        <div class="tip"><b>준비됨</b> · 인앱/브라우저 알림 + 공지 broadcast 시스템 탑재</div>
+      </div>
+      <div class="step bb full">
+        <div class="sh"><span class="badge">5</span><h3>딱 두 숫자만 본다</h3></div>
+        <p>초반엔 가입자 수를 보지 마세요. ① <b style="color:var(--text)">공유→방문 전환율</b>(바이럴 계수가 1을 넘는가) ② <b style="color:var(--text)">투표한 사람 중 댓글까지 단 비율</b>(참여 깊이). 이 둘이 살아있으면 광고 없이도 굴러갑니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-label"><span class="n">02</span><h2>채널 맵 — 카테고리별 공략지</h2><span class="line"></span></div>
+    <table>
+      <thead><tr><th style="width:120px">카테고리</th><th>가장 잘 통하는 곳</th><th style="width:38%">운영 메모</th></tr></thead>
+      <tbody>
+        <tr><td><span class="cat-pill" style="color:var(--cat-soccer);background:color-mix(in oklab,var(--cat-soccer) 16%,transparent)"><span class="d" style="background:var(--cat-soccer)"></span>축구</span></td><td class="ch">펨코 축구게시판 · FM코리아 · 디시 해축갤</td><td class="note">경기 직후 1시간이 골든타임. 논란 장면을 주제로</td></tr>
+        <tr><td><span class="cat-pill" style="color:var(--cat-politics);background:color-mix(in oklab,var(--cat-politics) 16%,transparent)"><span class="d" style="background:var(--cat-politics)"></span>정치·사회</span></td><td class="ch">클리앙 · 보배드림 · 더쿠 · 인스티즈</td><td class="note">속보성 이슈에 즉시 대응. 자극적 단정은 금물</td></tr>
+        <tr><td><span class="cat-pill" style="color:var(--cat-ent);background:color-mix(in oklab,var(--cat-ent) 16%,transparent)"><span class="d" style="background:var(--cat-ent)"></span>연예</span></td><td class="ch">더쿠 · 인스티즈 · 디시 해당 갤</td><td class="note">팬덤이 양분되는 주제가 최고. 화력이 곧 트래픽</td></tr>
+        <tr><td><span class="cat-pill" style="color:var(--cat-game);background:color-mix(in oklab,var(--cat-game) 16%,transparent)"><span class="d" style="background:var(--cat-game)"></span>게임</span></td><td class="ch">인벤 · 아카라이브 · 디시 게임갤</td><td class="note">패치·밸런스·과금 논란 직후가 가장 뜨겁다</td></tr>
+        <tr><td><span class="cat-pill" style="color:var(--cat-econ);background:color-mix(in oklab,var(--cat-econ) 16%,transparent)"><span class="d" style="background:var(--cat-econ)"></span>경제</span></td><td class="ch">클리앙 · 부동산 카페 · X(트위터)</td><td class="note">부동산·세금·코인은 영원한 떡밥. 댓글 깊이 ↑</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="sec-label"><span class="n">03</span><h2>바이럴 루프</h2><span class="line"></span></div>
+    <div class="loop">
+      <div class="node"><div class="lk">Spark</div><h4>뜨거운 주제 등록</h4><p>그날의 빅 이슈를 접전 주제로 발행</p></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="lk">Vote</div><h4>입장 선택 → 결과 노출</h4><p>"나는 소수파 47%였다" 결과 화면</p></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="lk">Share</div><h4>실시간 % 카드 공유</h4><p>판세가 박힌 링크가 커뮤니티로</p></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="lk">Return</div><h4>알림으로 재방문</h4><p>"내 글에 반박이 달렸어요"</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-label"><span class="n">04</span><h2>첫 4주 런칭 캘린더</h2><span class="line"></span></div>
+    <div class="cal">
+      <div class="week">
+        <div class="wk">WEEK 1</div>
+        <div class="goal">씨앗 심기 &amp; 비공개 테스트</div>
+        <ul>
+          <li>topics-seed.sql 50개 투입</li>
+          <li>지인 30명 클로즈 베타</li>
+          <li>공유 카드·알림 동작 점검</li>
+          <li>관리자 모더레이션 리허설</li>
+        </ul>
+      </div>
+      <div class="week">
+        <div class="wk">WEEK 2</div>
+        <div class="goal">한 커뮤니티에 집중 침투</div>
+        <ul>
+          <li>가장 강한 1개 카테고리 선택</li>
+          <li>매일 1개 핫 주제 발행</li>
+          <li>관련 글에 자연 공유</li>
+          <li>공유→방문 전환율 측정 시작</li>
+        </ul>
+      </div>
+      <div class="week">
+        <div class="wk">WEEK 3</div>
+        <div class="goal">"오늘의 토론" 루틴화</div>
+        <ul>
+          <li>매일 오전 알림 발송 시작</li>
+          <li>카테고리 2~3개로 확장</li>
+          <li>BEST 댓글 캡처해 재유포</li>
+          <li>재방문율·댓글 비율 점검</li>
+        </ul>
+      </div>
+      <div class="week">
+        <div class="wk">WEEK 4</div>
+        <div class="goal">바이럴 점화 &amp; 확장</div>
+        <ul>
+          <li>주간 최대 접전 주제 푸시</li>
+          <li>승률 높은 채널에 예산 집중</li>
+          <li>사용자 생성 주제 유도</li>
+          <li>바이럴 계수 1 돌파 여부 판정</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-label"><span class="n">05</span><h2>성공 지표 — 이 둘만 본다</h2><span class="line"></span></div>
+    <div class="kpis">
+      <div class="kpi">
+        <div class="kl">① 바이럴 계수 (K-factor)</div>
+        <div class="kv">공유 → 방문 <span class="u">≥ 1.0</span></div>
+        <div class="kd">한 명이 공유해 한 명 이상을 데려오면 광고 없이 자가성장. 1 미만이면 주제의 화력이 부족한 것 — 채널·주제를 바꾼다.</div>
+      </div>
+      <div class="kpi">
+        <div class="kl">② 참여 깊이</div>
+        <div class="kv">투표자 중 댓글 <span class="u">≥ 25%</span></div>
+        <div class="kd">투표만 하고 떠나면 커뮤니티가 안 된다. 4명 중 1명이 근거를 남기면 토론판이 살아있다는 신호. 댓글 알림이 이 숫자를 끌어올린다.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <span><b>토론하자</b> · 런칭 마케팅 전략 — 광고 예산 ₩0 에서 시작</span>
+    <span>준비 자산 · <b>topics-seed.sql</b> (주제 50) · <b>notifications.sql</b> (알림) · <b>PWA 설치 배너</b></span>
+  </div>
+
+</div>
+</body>
+</html>
