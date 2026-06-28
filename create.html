@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7SYSZXTL1P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-7SYSZXTL1P');
+</script>
+<title>토론하자 · 토론 열기</title>
+<meta name="description" content="찬반이 확실히 갈리는 주제일수록 토론이 뜨겁다. 새 토론을 열어봐." />
+<meta name="theme-color" content="#0F1217" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="토론하자" />
+<meta property="og:title" content="토론하자 · 새 토론 열기" />
+<meta property="og:image" content="og.png" />
+<link rel="icon" type="image/png" href="favicon-32.png" />
+<link rel="apple-touch-icon" href="favicon-180.png" />
+<link rel="manifest" href="site.webmanifest" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="create-wrap">
+  <header class="topbar-sm">
+    <button class="btn ghost" onclick="location.href='index.html'" style="padding:0 10px;gap:6px">
+      <svg width="16" height="16" style="transform:rotate(180deg)"><use href="#ic-arrow-r"/></svg>목록
+    </button>
+    <a class="logo" href="index.html" style="font-size:26px"><span class="l1">토론</span><span class="l2">하자</span><span class="dot">.</span></a>
+  </header>
+
+  <div class="create-body">
+    <div class="card create-card">
+      <h1>새 토론 열기</h1>
+      <p class="desc">찬반이 확실히 갈리는 주제일수록 토론이 뜨겁다.</p>
+
+      <div class="field">
+        <label>카테고리</label>
+        <div class="cat-pick" id="catPick">
+          <button type="button" class="cat-opt" data-cat="정치" data-color="var(--cat-politics)">정치</button>
+          <button type="button" class="cat-opt" data-cat="축구" data-color="var(--cat-soccer)">축구</button>
+          <button type="button" class="cat-opt" data-cat="연예" data-color="var(--cat-ent)">연예</button>
+          <button type="button" class="cat-opt" data-cat="게임" data-color="var(--cat-game)">게임</button>
+          <button type="button" class="cat-opt" data-cat="사회" data-color="var(--cat-society)">사회</button>
+          <button type="button" class="cat-opt" data-cat="경제" data-color="var(--cat-econ)">경제</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>토론 주제 <span style="color:var(--b-bright)">*</span></label>
+        <input class="txt-input" id="titleInput" type="text" maxlength="60" placeholder="예) 기본소득 月 50만원 전국민 지급, 도입해야 한다" />
+      </div>
+
+      <div class="field">
+        <label>설명 (선택)</label>
+        <textarea class="txt-area" id="descInput" maxlength="300" placeholder="배경이나 쟁점을 간단히 써."></textarea>
+      </div>
+
+      <div class="field">
+        <label>입장 구도</label>
+        <div class="ab-row">
+          <div class="ab-box a"><div class="ab-lbl">찬성 · A</div><div class="ab-sub">블루 진영 · 도입/찬성</div></div>
+          <div class="ab-box b"><div class="ab-lbl">반대 · B</div><div class="ab-sub">레드 진영 · 반대/신중</div></div>
+        </div>
+      </div>
+
+      <button class="create-submit" id="submitBtn">토론 시작하기</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">토론 열렸다</div>
+
+<script src="icons.js"></script>
+<script src="supabase.js"></script>
+<script src="create.js"></script>
+<script src="pwa.js"></script>
+</body>
+</html>
