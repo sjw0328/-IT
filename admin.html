@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>토론하자 · 관리자</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" href="favicon-32.png" />
+<link rel="apple-touch-icon" href="favicon-180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Serif+KR:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  #adminGate {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--bg-deep, #0B111F);
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+  }
+  #adminGate .gate-card {
+    width: 100%; max-width: 360px; text-align: center;
+    background: var(--surface, #1A2235); border: 1px solid var(--border, #2A3550);
+    border-radius: 18px; padding: 34px 28px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.45);
+  }
+  #adminGate .gate-icon {
+    width: 52px; height: 52px; margin: 0 auto 16px; border-radius: 14px;
+    background: color-mix(in oklab, var(--a-bright, #4F8BFF) 18%, transparent);
+    display: grid; place-items: center; color: var(--a-bright, #4F8BFF);
+  }
+  #adminGate h2 { font-size: 19px; font-weight: 800; color: var(--text, #E5ECFA); }
+  #adminGate p { font-size: 13px; color: var(--muted, #7E8AA6); margin-top: 6px; }
+  #adminGate input {
+    width: 100%; margin-top: 20px; height: 46px; padding: 0 14px;
+    background: var(--bg, #111827); border: 1px solid var(--border, #2A3550);
+    border-radius: 11px; color: var(--text, #E5ECFA); font-size: 15px; text-align: center;
+    letter-spacing: 2px;
+  }
+  #adminGate input:focus { outline: none; border-color: var(--a-bright, #4F8BFF); }
+  #adminGate button {
+    width: 100%; margin-top: 12px; height: 46px; border: none; border-radius: 11px;
+    background: var(--a-bright, #4F8BFF); color: #fff; font-size: 15px; font-weight: 700;
+  }
+  #adminGate .gate-err { color: var(--b-bright, #FF5C7A); font-size: 13px; margin-top: 12px; min-height: 18px; }
+  body.gated { overflow: hidden; }
+
+  /* ── 데이터 관리 탭 ── */
+  .store-track { height: 12px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
+  .store-fill { height: 100%; width: 0; border-radius: 999px; background: var(--a-bright); transition: width .7s cubic-bezier(.4,0,.2,1), background .3s; }
+  .cleanup-list { display: flex; flex-direction: column; gap: 12px; }
+  .cleanup-row { display: flex; align-items: center; gap: 16px; padding: 16px 18px; }
+  .cl-ico { width: 40px; height: 40px; flex: none; border-radius: 11px; display: grid; place-items: center;
+            background: color-mix(in oklab, var(--b-bright) 14%, transparent); color: var(--b-bright); }
+  .cl-body { flex: 1; min-width: 0; }
+  .cl-title { font-size: 14px; font-weight: 800; }
+  .cl-desc { font-size: 12.5px; color: var(--subtext); margin-top: 3px; line-height: 1.5; text-wrap: pretty; }
+  .cl-days { height: 34px; padding: 0 10px; border-radius: 9px; background: var(--surface-2);
+             border: 1px solid var(--border); color: var(--text); font-size: 13px; font-weight: 600; }
+  .cl-run { height: 34px; padding: 0 16px; white-space: nowrap; }
+  .cl-res { font-size: 12px; color: var(--live); font-weight: 700; min-width: 64px; text-align: right; }
+  @media (max-width: 720px) { .cleanup-row { flex-wrap: wrap; } .cl-body { flex-basis: 100%; } }
+
+  /* ── 검색 / 필터 툴바 ── */
+  .adm-toolbar { display: flex; align-items: center; gap: 10px; padding: 0 14px 14px; flex-wrap: wrap; }
+  .adm-search { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; border-radius: 9px;
+    background: var(--surface-2); border: 1px solid var(--border-2); color: var(--muted); flex: 1 1 200px; max-width: 340px; }
+  .adm-search svg { flex: none; }
+  .adm-search input { flex: 1; min-width: 0; background: none; border: none; outline: none; color: var(--text); font-size: 13.5px; font-family: inherit; }
+  .adm-sel { height: 36px; padding: 0 12px; border-radius: 9px; background: var(--surface-2); border: 1px solid var(--border-2);
+    color: var(--text); font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; }
+
+  /* ── 유저 관리 테이블 ── */
+  .utable { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .table-scroll .utable { min-width: 560px; }
+  .utable th { text-align: left; font-size: 11.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; padding: 0 14px 10px; white-space: nowrap; position: sticky; top: 0; background: var(--surface); }
+  .utable td { padding: 12px 14px; border-top: 1px solid var(--border); vertical-align: middle; }
+  .utable tr:hover td { background: var(--surface-2); }
+  .u-id { display: flex; align-items: center; gap: 10px; }
+  .u-emoji { width: 32px; height: 32px; flex: none; border-radius: 9px; background: var(--surface-2); border: 1px solid var(--border-2); display: grid; place-items: center; font-size: 16px; }
+  .u-nick { font-weight: 700; }
+  .u-tag { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .u-state { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .u-state.ok  { color: var(--live); background: rgba(62,124,90,.12); }
+  .u-state.ban { color: #DC2626; background: rgba(220,38,38,.10); }
+
+  /* danger 액션은 실제 위험색(빨강)으로 — 슬레이트 테마에 묻히지 않게 */
+  .btn.dz { background: #DC2626; border-color: transparent; color: #fff; }
+  .btn.dz:hover { background: #B91C1C; }
+  .btn.dz.ghost { background: transparent; color: #DC2626; border-color: rgba(220,38,38,.32); }
+
+  /* ── 수정 모달 ── */
+  .adm-modal { position: fixed; inset: 0; z-index: 5000; display: none; align-items: center; justify-content: center; padding: 24px;
+    background: rgba(10,8,6,.5); }
+  .adm-modal.on { display: flex; }
+  .adm-modal .m-card { width: 100%; max-width: 520px; background: var(--surface); border: 1px solid var(--border-2);
+    border-radius: 16px; box-shadow: 0 30px 70px rgba(0,0,0,.3); padding: 24px 26px; max-height: 90vh; overflow-y: auto; }
+  .m-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .m-head h3 { font-size: 18px; font-weight: 800; }
+  .m-close { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border-2); background: var(--surface-2); display: grid; place-items: center; cursor: pointer; color: var(--muted); }
+  .m-field { margin-bottom: 16px; }
+  .m-field label { display: block; font-size: 12.5px; font-weight: 800; color: var(--subtext); margin-bottom: 7px; }
+  .m-field input, .m-field textarea, .m-field select { width: 100%; background: var(--surface-2); border: 1px solid var(--border-2);
+    border-radius: 10px; padding: 11px 13px; color: var(--text); font-size: 14px; font-family: inherit; outline: none; box-sizing: border-box; }
+  .m-field textarea { resize: vertical; min-height: 84px; line-height: 1.5; }
+  .m-field input:focus, .m-field textarea:focus, .m-field select:focus { border-color: var(--a-border); box-shadow: 0 0 0 3px var(--a-soft); }
+  .m-foot { display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin-top: 22px; }
+  .m-msg { font-size: 12.5px; color: var(--muted); margin-right: auto; }
+
+  /* ── YouTube Studio 스타일: 세그먼트 / 차트 / 대시보드 ── */
+  .seg { display: inline-flex; gap: 2px; background: var(--surface-2); border: 1px solid var(--border-2); border-radius: 9px; padding: 2px; }
+  .seg-btn { border: none; background: none; padding: 5px 11px; border-radius: 7px; font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .seg-btn.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+
+  .cc-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .cc-title { font-size: 15px; font-weight: 800; }
+  .cc-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .chart-card { padding: 18px 20px; }
+  .chart-wrap { position: relative; width: 100%; height: 210px; }
+  .chart-wrap canvas { width: 100%; height: 100%; display: block; }
+
+  .dash-grid { display: grid; grid-template-columns: 1.7fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .dash-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .summary-card { padding: 18px 20px; }
+  .sum-list { display: flex; flex-direction: column; }
+  .sum-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-top: 1px solid var(--border); }
+  .sum-row:first-child { border-top: none; }
+  .sum-ic { width: 34px; height: 34px; flex: none; border-radius: 9px; background: var(--surface-2); border: 1px solid var(--border-2); display: grid; place-items: center; color: var(--subtext); }
+  .sum-body { flex: 1; min-width: 0; }
+  .sum-label { font-size: 13px; font-weight: 600; color: var(--subtext); }
+  .sum-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .sum-val { font-family: var(--font-display); font-size: 22px; letter-spacing: -.5px; font-variant-numeric: tabular-nums; }
+
+  .list-card { padding: 16px 18px; }
+  .lc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .lc-tag { font-size: 11.5px; font-weight: 700; color: var(--muted); }
+  .mini-row { display: flex; align-items: center; gap: 11px; padding: 10px 0; border-top: 1px solid var(--border); }
+  .mini-row:first-child { border-top: none; }
+  .mini-rank { width: 22px; height: 22px; flex: none; border-radius: 7px; background: var(--surface-2); display: grid; place-items: center; font-size: 12px; font-weight: 800; color: var(--subtext); }
+  .mini-dot { width: 8px; height: 8px; flex: none; border-radius: 50%; }
+  .mini-dot.b { background: var(--b-bright); }
+  .mini-body { flex: 1; min-width: 0; }
+  .mini-title { font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mini-sub { font-size: 11.5px; color: var(--muted); margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mini-bar { height: 5px; border-radius: 999px; background: var(--b-soft); overflow: hidden; margin-top: 6px; }
+  .mini-bar span { display: block; height: 100%; background: var(--a); border-radius: 999px; }
+  .mini-meta { font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .mini-meta span { font-size: 11px; color: var(--muted); font-weight: 600; margin-left: 2px; }
+  .empty-mini { font-size: 12.5px; color: var(--muted); padding: 18px 2px; text-align: center; }
+
+  .an-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
+  .an-card { padding: 15px 17px; border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--border); cursor: pointer; transition: border-color .15s, transform .12s; }
+  .an-card:hover { border-color: var(--a-border); transform: translateY(-1px); }
+  .an-card-label { font-size: 12px; color: var(--subtext); font-weight: 600; }
+  .an-card-val { font-family: var(--font-display); font-size: 27px; letter-spacing: -.5px; font-variant-numeric: tabular-nums; margin-top: 6px; }
+  .an-card-note { font-size: 11px; color: var(--muted); margin-top: 5px; }
+
+  .bars { display: flex; flex-direction: column; gap: 11px; padding: 4px 2px; }
+  .bar-row { display: flex; align-items: center; gap: 12px; }
+  .bar-label { width: 44px; flex: none; font-size: 12.5px; font-weight: 700; color: var(--subtext); }
+  .bar-track { flex: 1; height: 10px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+  .bar-track span { display: block; height: 100%; border-radius: 999px; }
+  .bar-val { width: 32px; flex: none; text-align: right; font-size: 12.5px; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+  @media (max-width: 1100px) { .admin-side .sidebar .sidebar-label { display: none; } }
+  @media (max-width: 1000px) { .dash-grid, .dash-grid2 { grid-template-columns: 1fr; } .an-metrics { grid-template-columns: repeat(2,1fr); } }
+
+  /* \uc9e7\uc740 \ud654\uba74\uc5d0\uc11c \ub300\uc2dc\ubcf4\ub4dc/\ubd84\uc11d\uc774 \uc798\ub9ac\uc9c0 \uc54a\ub3c4\ub85d \uba54\uc778 \uc601\uc5ed \uc790\uccb4 \uc2a4\ud06c\ub864 \ud3f4\ubc31 */
+  .admin-main { overflow-y: auto; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="gated">
+
+<!-- ══ 관리자 비밀번호 게이트 ══ -->
+<div id="adminGate">
+  <div class="gate-card">
+    <div class="gate-icon"><svg width="26" height="26"><use href="#ic-shield"/></svg></div>
+    <h2>관리자 인증</h2>
+    <p>관리자 비밀번호를 입력하세요</p>
+    <input id="gatePw" type="password" inputmode="text" placeholder="비밀번호" autocomplete="off" autofocus />
+    <button id="gateBtn">입장</button>
+    <div class="gate-err" id="gateErr"></div>
+  </div>
+</div>
+
+<div class="admin">
+
+  <!-- sidebar -->
+  <aside class="admin-side">
+    <a class="logo" href="index.html" style="font-size:24px;padding:0 8px"><span class="l1">토론</span><span class="l2">하자</span><span class="dot">.</span></a>
+    <div class="admin-badge"><svg width="12" height="12"><use href="#ic-shield"/></svg>ADMIN</div>
+    <nav class="sidebar">
+      <div class="nav-item on" data-view="view-dash"><svg width="17" height="17" style="color:var(--a-bright)"><use href="#ic-grid"/></svg>대시보드</div>
+      <div class="nav-item" data-view="view-analytics"><svg width="17" height="17"><use href="#ic-chart"/></svg>분석</div>
+      <div class="sidebar-label">관리</div>
+      <div class="nav-item" data-view="view-debates"><svg width="17" height="17"><use href="#ic-gavel"/></svg>토론</div>
+      <div class="nav-item" data-view="view-comments"><svg width="17" height="17"><use href="#ic-comment"/></svg>댓글</div>
+      <div class="nav-item" data-view="view-reports"><svg width="17" height="17"><use href="#ic-flag"/></svg>신고
+        <span id="navBadge" style="margin-left:auto;font-size:11px;font-weight:800;color:#fff;background:var(--a);border-radius:999px;padding:1px 7px">0</span>
+      </div>
+      <div class="nav-item" data-view="view-users"><svg width="17" height="17"><use href="#ic-users"/></svg>사용자</div>
+      <div class="nav-item" data-view="view-storage"><svg width="17" height="17"><use href="#ic-database"/></svg>데이터</div>
+    </nav>
+    <div style="margin-top:auto;display:flex;align-items:center;gap:9px;padding:10px;border-radius:10px;background:var(--surface)">
+      <div style="width:30px;height:30px;border-radius:9px;background:var(--surface-3);display:grid;place-items:center;font-size:14px">🛡️</div>
+      <div><div style="font-size:13px;font-weight:700">관리자 01</div><div style="font-size:11px;color:var(--muted)">super admin</div></div>
+    </div>
+  </aside>
+
+  <!-- main -->
+  <main class="admin-main">
+   <!-- ══ 대시보드 ══ -->
+   <div id="view-dash" class="admin-view" style="overflow-y:auto">
+    <div class="admin-head">
+      <div><h1>대시보드</h1><div class="sub">토론하자 운영 현황을 한눈에</div></div>
+      <a class="btn solid" href="create.html" style="height:38px;padding:0 16px"><svg width="15" height="15"><use href="#ic-plus"/></svg>새 토론 생성</a>
+    </div>
+    <div class="dash-grid">
+      <div class="card chart-card">
+        <div class="cc-head">
+          <div><div class="cc-title">최근 14일 활동</div><div class="cc-sub" id="dashTrendSub">불러오는 중…</div></div>
+          <div class="seg" id="dashMetricSeg">
+            <button class="seg-btn on" data-m="comments">댓글</button>
+            <button class="seg-btn" data-m="votes">투표</button>
+            <button class="seg-btn" data-m="users">신규 유저</button>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="dashChart"></canvas></div>
+      </div>
+      <div class="card summary-card">
+        <div class="cc-title" style="margin-bottom:6px">채널 요약</div>
+        <div class="sum-list" id="dashSummary"></div>
+      </div>
+    </div>
+    <div class="dash-grid2">
+      <div class="card list-card">
+        <div class="lc-head"><span class="cc-title">인기 토론 TOP 5</span><span class="lc-tag">참여순</span></div>
+        <div id="dashTop"></div>
+      </div>
+      <div class="card list-card">
+        <div class="lc-head"><span class="cc-title">처리 대기</span><span class="lc-tag" id="dashPendTag">신고</span></div>
+        <div id="dashPending"></div>
+      </div>
+    </div>
+   </div>
+
+   <!-- ══ 분석 ══ -->
+   <div id="view-analytics" class="admin-view" style="display:none;overflow-y:auto">
+    <div class="admin-head">
+      <div><h1>분석</h1><div class="sub">참여·콘텐츠·시청자 지표</div></div>
+      <div class="seg" id="anRangeSeg">
+        <button class="seg-btn" data-d="7">7일</button>
+        <button class="seg-btn on" data-d="14">14일</button>
+        <button class="seg-btn" data-d="30">30일</button>
+      </div>
+    </div>
+    <div class="an-metrics" id="anMetrics"></div>
+    <div class="card chart-card" style="margin-bottom:16px">
+      <div class="cc-head">
+        <div><div class="cc-title">일별 활동</div><div class="cc-sub">지표를 선택해 추이를 확인하세요</div></div>
+        <div class="seg" id="anMetricSeg">
+          <button class="seg-btn on" data-m="comments">댓글</button>
+          <button class="seg-btn" data-m="votes">투표</button>
+          <button class="seg-btn" data-m="debates">신규 토론</button>
+          <button class="seg-btn" data-m="users">신규 유저</button>
+        </div>
+      </div>
+      <div class="chart-wrap" style="height:240px"><canvas id="anChart"></canvas></div>
+    </div>
+    <div class="dash-grid2">
+      <div class="card chart-card">
+        <div class="cc-head"><div class="cc-title">카테고리별 토론</div></div>
+        <div id="anCats" class="bars"></div>
+      </div>
+      <div class="card chart-card">
+        <div class="cc-head"><div><div class="cc-title">시간대별 댓글</div><div class="cc-sub">활동이 몰리는 시간</div></div></div>
+        <div class="chart-wrap" style="height:170px"><canvas id="anHours"></canvas></div>
+      </div>
+    </div>
+    <div class="card table-card" style="margin-top:16px;flex:none">
+      <div class="table-head"><span class="t">참여 TOP 토론</span><div style="flex:1"></div></div>
+      <div class="table-scroll">
+        <table class="rtable"><thead><tr><th>제목</th><th>카테고리</th><th>찬/반</th><th>참여</th><th>댓글</th></tr></thead><tbody id="anTopRows"></tbody></table>
+      </div>
+    </div>
+   </div>
+
+   <!-- ══ 댓글 모더레이션 ══ -->
+   <div id="view-comments" class="admin-view" style="display:none">
+    <div class="admin-head">
+      <div><h1>댓글</h1><div class="sub">모든 의견을 검토·블라인드·삭제합니다</div></div>
+      <button class="btn" id="commentsRefresh" style="height:38px;padding:0 16px"><svg width="15" height="15"><use href="#ic-chart"/></svg>새로고침</button>
+    </div>
+    <div class="card table-card">
+      <div class="table-head">
+        <span class="t">전체 댓글</span>
+        <div style="flex:1"></div>
+        <span id="cmCount" style="font-size:12.5px;color:var(--muted);font-weight:700;white-space:nowrap"></span>
+      </div>
+      <div class="adm-toolbar">
+        <div class="adm-search">
+          <svg width="15" height="15"><use href="#ic-search"/></svg>
+          <input id="cmSearch" type="text" placeholder="내용·작성자 검색…" autocomplete="off" />
+        </div>
+        <select class="adm-sel" id="cmFilter">
+          <option value="">전체</option>
+          <option value="reported">신고됨</option>
+          <option value="blind">블라인드</option>
+        </select>
+      </div>
+      <div class="table-scroll">
+        <table class="rtable"><thead><tr>
+          <th>작성자</th><th>내용</th><th>토론</th><th>신고</th><th>작성</th><th>상태</th><th style="text-align:right">조치</th>
+        </tr></thead><tbody id="commentRows"></tbody></table>
+      </div>
+    </div>
+   </div>
+
+   <div id="view-reports" class="admin-view" style="display:none">
+    <div class="admin-head">
+      <div><h1>신고 관리</h1><div class="sub">접수된 신고를 검토하고 즉시 조치하세요</div></div>
+      <a class="btn solid" href="create.html" style="height:38px;padding:0 16px"><svg width="15" height="15"><use href="#ic-plus"/></svg>새 토론 생성</a>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kv" id="kpiTopics">0</div><div class="kl">진행중 토론</div></div>
+      <div class="kpi"><div class="kv" id="kpiReports" style="color:var(--warn)">0</div><div class="kl">누적 신고</div></div>
+      <div class="kpi"><div class="kv" id="kpiComments">0</div><div class="kl">전체 댓글</div></div>
+      <div class="kpi"><div class="kv" id="kpiBanned" style="color:var(--b-bright)">0</div><div class="kl">제재중 유저</div></div>
+    </div>
+
+    <div class="card table-card">
+      <div class="table-head">
+        <span class="t">접수 신고 목록</span>
+        <span class="live-dot"></span>
+        <div style="flex:1"></div>
+        <select class="adm-sel" id="repFilter" style="height:32px">
+          <option value="">전체</option>
+          <option value="open">미처리만</option>
+          <option value="blind">블라인드만</option>
+        </select>
+      </div>
+      <div class="table-scroll">
+        <table class="rtable">
+          <thead><tr>
+            <th>대상 닉네임</th><th>사유</th><th>댓글 내용</th><th>토론</th><th>접수</th><th>상태</th><th style="text-align:right">조치</th>
+          </tr></thead>
+          <tbody id="reportRows"></tbody>
+        </table>
+      </div>
+    </div>
+   </div>
+
+   <div id="view-debates" class="admin-view" style="display:none">
+    <div class="admin-head">
+      <div><h1>토론 관리</h1><div class="sub">전체 토론을 마감·재개하거나 삭제합니다</div></div>
+      <a class="btn solid" href="create.html" style="height:38px;padding:0 16px"><svg width="15" height="15"><use href="#ic-plus"/></svg>새 토론 생성</a>
+    </div>
+    <div class="card table-card">
+      <div class="table-head">
+        <span class="t">전체 토론</span>
+        <div style="flex:1"></div>
+        <span id="debCount" style="font-size:12.5px;color:var(--muted);font-weight:700;white-space:nowrap"></span>
+      </div>
+      <div class="adm-toolbar">
+        <div class="adm-search">
+          <svg width="15" height="15"><use href="#ic-search"/></svg>
+          <input id="debSearch" type="text" placeholder="제목 검색…" autocomplete="off" />
+        </div>
+        <select class="adm-sel" id="debCat">
+          <option value="">전체 카테고리</option>
+          <option value="정치">정치</option><option value="축구">축구</option><option value="연예">연예</option>
+          <option value="게임">게임</option><option value="사회">사회</option><option value="경제">경제</option>
+        </select>
+        <select class="adm-sel" id="debStatus">
+          <option value="">전체 상태</option>
+          <option value="active">진행중</option>
+          <option value="closed">마감</option>
+        </select>
+      </div>
+      <div class="table-scroll">
+        <table class="dtable">
+          <thead><tr>
+            <th>제목</th><th>카테고리</th><th>찬/반</th><th>댓글</th><th>상태</th><th style="text-align:right">관리</th>
+          </tr></thead>
+          <tbody id="debateRows"></tbody>
+        </table>
+      </div>
+    </div>
+   </div>
+
+   <div id="view-storage" class="admin-view" style="display:none">
+    <div class="admin-head">
+      <div><h1>데이터 관리</h1><div class="sub">Free plan 용량(500MB) 안에서 오래된 데이터를 정리합니다</div></div>
+      <button class="btn" id="storageRefresh" style="height:38px;padding:0 16px"><svg width="15" height="15"><use href="#ic-chart"/></svg>새로고침</button>
+    </div>
+
+    <div class="card" style="padding:18px 20px;margin-bottom:18px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:11px">
+        <span style="font-weight:800;font-size:15px;display:inline-flex;align-items:center;gap:8px;white-space:nowrap"><svg width="16" height="16" style="color:var(--a-bright)"><use href="#ic-database"/></svg>DB 사용량</span>
+        <span style="font-size:13px;color:var(--subtext)"><b id="dbUsed" style="font-size:16px;color:var(--text);font-variant-numeric:tabular-nums">–</b> / 500 MB</span>
+      </div>
+      <div class="store-track"><div class="store-fill" id="dbFill"></div></div>
+      <div id="dbHint" style="font-size:12px;color:var(--muted);margin-top:9px">불러오는 중…</div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kv" id="stTopics">–</div><div class="kl">토론 (종료 <b id="stClosed" style="color:var(--warn)">0</b>)</div></div>
+      <div class="kpi"><div class="kv" id="stComments">–</div><div class="kl">댓글</div></div>
+      <div class="kpi"><div class="kv" id="stVotes">–</div><div class="kl">투표</div></div>
+      <div class="kpi"><div class="kv" id="stUsers">–</div><div class="kl">유저 (고아 <b id="stOrphan" style="color:var(--b-bright)">0</b>)</div></div>
+    </div>
+
+    <div class="panel-label" style="margin:6px 2px 12px">정리 작업</div>
+    <div class="cleanup-list">
+      <div class="cleanup-row card">
+        <div class="cl-ico"><svg width="20" height="20"><use href="#ic-trash"/></svg></div>
+        <div class="cl-body">
+          <div class="cl-title">종료된 오래된 토론 삭제</div>
+          <div class="cl-desc">마감·종료된 토론과 그에 달린 댓글·투표·신고를 함께 제거합니다. 용량 확보 효과가 가장 큽니다.</div>
+        </div>
+        <select class="cl-days" id="daysDebates"><option value="7">7일 이상</option><option value="30" selected>30일 이상</option><option value="90">90일 이상</option></select>
+        <span class="cl-res" id="resDebates"></span>
+        <button class="btn dz cl-run" data-act="debates" data-confirm="0">정리</button>
+      </div>
+      <div class="cleanup-row card">
+        <div class="cl-ico"><svg width="20" height="20"><use href="#ic-flag"/></svg></div>
+        <div class="cl-body">
+          <div class="cl-title">오래된 신고 삭제</div>
+          <div class="cl-desc">접수 후 일정 기간이 지난 신고 기록을 제거합니다. 처리 완료된 신고를 비웁니다.</div>
+        </div>
+        <select class="cl-days" id="daysReports"><option value="7">7일 이상</option><option value="30" selected>30일 이상</option><option value="90">90일 이상</option></select>
+        <span class="cl-res" id="resReports"></span>
+        <button class="btn dz cl-run" data-act="reports" data-confirm="0">정리</button>
+      </div>
+      <div class="cleanup-row card">
+        <div class="cl-ico"><svg width="20" height="20"><use href="#ic-user"/></svg></div>
+        <div class="cl-body">
+          <div class="cl-title">활동 없는 익명 계정 삭제</div>
+          <div class="cl-desc">투표·댓글 기록이 전혀 없는 게스트 계정을 정리합니다. (제재된 계정은 보존됩니다.)</div>
+        </div>
+        <span class="cl-res" id="resUsers"></span>
+        <button class="btn dz cl-run" data-act="users" data-confirm="0">정리</button>
+      </div>
+    </div>
+
+    <div class="panel-label" style="margin:20px 2px 12px;color:var(--warn)">익스트림 모드 — extreme.sql</div>
+    <div class="cleanup-list">
+      <div class="cleanup-row card" style="border-color:color-mix(in oklab, var(--warn) 35%, var(--border))">
+        <div class="cl-ico" style="background:color-mix(in oklab, var(--warn) 16%, transparent);color:var(--warn)"><svg width="20" height="20"><use href="#ic-fire"/></svg></div>
+        <div class="cl-body">
+          <div class="cl-title">마감 토론 투표·좋아요 원본 비우기</div>
+          <div class="cl-desc">마감된 모든 토론의 votes·comment_likes 행을 즉시 삭제합니다. 찬/반 % 결과는 집계 컬럼에 영구 보존 — 화면은 그대로 보입니다.</div>
+        </div>
+        <span class="cl-res" id="resStrip"></span>
+        <button class="btn dz cl-run" data-act="strip" data-confirm="0">비우기</button>
+      </div>
+      <div class="cleanup-row card" style="border-color:color-mix(in oklab, var(--warn) 35%, var(--border))">
+        <div class="cl-ico" style="background:color-mix(in oklab, var(--warn) 16%, transparent);color:var(--warn)"><svg width="20" height="20"><use href="#ic-clock"/></svg></div>
+        <div class="cl-body">
+          <div class="cl-title">자동정리 지금 실행</div>
+          <div class="cl-desc">매일 새벽 자동으로 도는 수명주기 정리를 즉시 1회 실행: 종료 토론 마감 → 투표 비우기 → 7일 지난 댓글 삭제 → 30일 지난 토론 삭제 → 고아 계정 정리.</div>
+        </div>
+        <span class="cl-res" id="resAuto"></span>
+        <button class="btn dz cl-run" data-act="auto" data-confirm="0">실행</button>
+      </div>
+    </div>
+   </div>
+
+   <div id="view-users" class="admin-view" style="display:none">
+    <div class="admin-head">
+      <div><h1>사용자 현황</h1><div class="sub">접속·활동 사용자(DAU/WAU)를 측정 · 관리자가 열 때만 집계돼 트래픽은 거의 안 늘어난다</div></div>
+      <button class="btn" id="usersRefresh" style="height:38px;padding:0 16px"><svg width="15" height="15"><use href="#ic-chart"/></svg>새로고침</button>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kv" id="usTotal">–</div><div class="kl">누적 사용자 (기기)</div></div>
+      <div class="kpi"><div class="kv" id="usDau" style="color:var(--live)">–</div><div class="kl">오늘 활동 · DAU</div></div>
+      <div class="kpi"><div class="kv" id="usWau" style="color:var(--a-bright)">–</div><div class="kl">7일 활동 · WAU</div></div>
+      <div class="kpi"><div class="kv" id="usNew">–</div><div class="kl">오늘 신규 가입</div></div>
+    </div>
+
+    <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kpi"><div class="kv" id="usOnline" style="color:var(--live)">1</div><div class="kl"><span class="live-dot" style="display:inline-block;vertical-align:middle;margin-right:5px"></span>현재 접속중 (실시간)</div></div>
+      <div class="kpi"><div class="kv" id="usCToday">–</div><div class="kl">오늘 작성 댓글</div></div>
+      <div class="kpi"><div class="kv" id="usVToday">–</div><div class="kl">오늘 투표</div></div>
+    </div>
+
+    <div class="card" style="padding:16px 18px;margin-top:6px">
+      <div id="usHint" style="font-size:12.5px;color:var(--muted);line-height:1.6">불러오는 중…</div>
+    </div>
+
+    <div class="card table-card" style="margin-top:16px">
+      <div class="table-head">
+        <span class="t">사용자 목록</span>
+        <div style="flex:1"></div>
+        <span id="usListCount" style="font-size:12.5px;color:var(--muted);font-weight:700;white-space:nowrap"></span>
+      </div>
+      <div class="adm-toolbar">
+        <div class="adm-search">
+          <svg width="15" height="15"><use href="#ic-search"/></svg>
+          <input id="usSearch" type="text" placeholder="닉네임 검색…" autocomplete="off" />
+        </div>
+        <select class="adm-sel" id="usFilter">
+          <option value="">전체</option>
+          <option value="banned">정지중만</option>
+        </select>
+      </div>
+      <div class="table-scroll">
+        <table class="utable">
+          <thead><tr>
+            <th>유저</th><th>가입</th><th>댓글</th><th>상태</th><th style="text-align:right">조치</th>
+          </tr></thead>
+          <tbody id="userRows"></tbody>
+        </table>
+      </div>
+    </div>
+   </div>
+
+  </main>
+
+  <!-- right rail -->
+  <aside class="admin-rail">
+    <div>
+      <div class="panel-label">웹사이트 공지</div>
+      <div class="card" style="padding:16px">
+        <textarea id="annInput" class="txt-area" style="min-height:90px;background:var(--surface-2);font-size:14px" placeholder="메인 화면 상단에 표시할 공지를 입력하세요… (예: 주제 신청은 자정 12시까지 마감됩니다)"></textarea>
+        <button class="btn accent" id="annPost" style="width:100%;height:42px;margin-top:10px"><svg width="15" height="15"><use href="#ic-flag"/></svg>공지 게시</button>
+        <div id="annMsg" style="font-size:12px;color:var(--muted);margin-top:9px;min-height:16px"></div>
+      </div>
+    </div>
+
+    <div style="min-height:0;display:flex;flex-direction:column;flex:1">
+      <div class="panel-label">게시된 공지</div>
+      <div id="annList" style="display:flex;flex-direction:column;gap:10px;overflow-y:auto"></div>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ══ 토론 수정 모달 ══ -->
+<div class="adm-modal" id="editModal">
+  <div class="m-card">
+    <div class="m-head">
+      <h3>토론 수정</h3>
+      <button class="m-close" id="editClose" type="button"><svg width="16" height="16"><use href="#ic-x"/></svg></button>
+    </div>
+    <div class="m-field">
+      <label>제목</label>
+      <input id="editTitle" type="text" maxlength="120" />
+    </div>
+    <div class="m-field">
+      <label>카테고리</label>
+      <select id="editCat">
+        <option value="정치">정치</option><option value="축구">축구</option><option value="연예">연예</option>
+        <option value="게임">게임</option><option value="사회">사회</option><option value="경제">경제</option><option value="기타">기타</option>
+      </select>
+    </div>
+    <div class="m-field">
+      <label>설명</label>
+      <textarea id="editDesc" maxlength="500" placeholder="토론 설명 (선택)"></textarea>
+    </div>
+    <div class="m-foot">
+      <span class="m-msg" id="editMsg"></span>
+      <button class="btn" id="editCancel" type="button">취소</button>
+      <button class="btn solid" id="editSave" type="button">저장</button>
+    </div>
+  </div>
+</div>
+
+<script src="icons.js"></script>
+<script>
+  /* ── 관리자 비밀번호 게이트 (진입 시마다 인증) ──
+     평문 대신 SHA-256 해시를 비교 → 소스(View Source)에 비밀번호가 노출되지 않음.
+     ※ 클라이언트 게이트는 1차 차단일 뿐, 실제 보호는 Supabase RLS 정책이 담당.
+     비밀번호 변경: 새 값의 SHA-256 해시를 구해 PW_HASH 에 넣으세요.
+     ⚠ crypto.subtle 은 HTTPS/localhost(보안 컨텍스트)에서만 동작 →
+        HTTP·IP·file:// 에서도 되도록 순수 JS SHA-256 폴백을 함께 둔다. */
+  (function () {
+    var PW_HASH = '00f895a79024688ce890f2e9a1f502b3a24352b4989b53a7bc2f277edad437dc';
+    var gate = document.getElementById('adminGate');
+    var input = document.getElementById('gatePw');
+    var btn = document.getElementById('gateBtn');
+    var err = document.getElementById('gateErr');
+
+    /* 순수 JS SHA-256 (의존성 0) — crypto.subtle 미지원 환경 폴백 */
+    function sha256js(ascii) {
+      function rrot(v, a) { return (v >>> a) | (v << (32 - a)); }
+      var maxWord = Math.pow(2, 32), i, j, result = '';
+      var words = [], asciiBitLength = ascii.length * 8;
+      var hash = sha256js.h = sha256js.h || [];
+      var k = sha256js.k = sha256js.k || [];
+      var primeCounter = k.length, isComposite = {};
+      for (var candidate = 2; primeCounter < 64; candidate++) {
+        if (!isComposite[candidate]) {
+          for (i = 0; i < 313; i += candidate) isComposite[i] = candidate;
+          hash[primeCounter] = (Math.pow(candidate, 0.5) * maxWord) | 0;
+          k[primeCounter++] = (Math.pow(candidate, 1 / 3) * maxWord) | 0;
+        }
+      }
+      ascii += '\x80';
+      while (ascii.length % 64 - 56) ascii += '\x00';
+      for (i = 0; i < ascii.length; i++) {
+        j = ascii.charCodeAt(i);
+        if (j >> 8) return;
+        words[i >> 2] |= j << ((3 - i) % 4) * 8;
+      }
+      words[words.length] = (asciiBitLength / maxWord) | 0;
+      words[words.length] = asciiBitLength;
+      for (j = 0; j < words.length;) {
+        var w = words.slice(j, j += 16), oldHash = hash;
+        hash = hash.slice(0, 8);
+        for (i = 0; i < 64; i++) {
+          var w15 = w[i - 15], w2 = w[i - 2];
+          var a = hash[0], e = hash[4];
+          var temp1 = hash[7] + (rrot(e, 6) ^ rrot(e, 11) ^ rrot(e, 25)) + ((e & hash[5]) ^ (~e & hash[6])) + k[i] +
+            (w[i] = i < 16 ? w[i] : (w[i - 16] + (rrot(w15, 7) ^ rrot(w15, 18) ^ (w15 >>> 3)) + w[i - 7] + (rrot(w2, 17) ^ rrot(w2, 19) ^ (w2 >>> 10))) | 0);
+          var temp2 = (rrot(a, 2) ^ rrot(a, 13) ^ rrot(a, 22)) + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+          hash = [(temp1 + temp2) | 0].concat(hash);
+          hash[4] = (hash[4] + temp1) | 0;
+        }
+        for (i = 0; i < 8; i++) hash[i] = (hash[i] + oldHash[i]) | 0;
+      }
+      for (i = 0; i < 8; i++)
+        for (j = 3; j + 1; j--) {
+          var b = (hash[i] >> (j * 8)) & 255;
+          result += ((b < 16) ? 0 : '') + b.toString(16);
+        }
+      return result;
+    }
+
+    async function sha256(s) {
+      if (window.crypto && crypto.subtle) {
+        try {
+          var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+          return Array.from(new Uint8Array(buf)).map(function (x) { return x.toString(16).padStart(2, '0'); }).join('');
+        } catch (e) { /* 폴백으로 진행 */ }
+      }
+      return sha256js(unescape(encodeURIComponent(s)));   // UTF-8 바이트 기준
+    }
+    function unlock(pw) {
+      gate.remove();
+      document.body.classList.remove('gated');
+      // 인증된 비밀번호를 데이터 계층에 전달 → 관리자 게이트 RPC(thj_admin_*) 가 서버에서 검증
+      try { if (window.DB && DB.setAdminPass) DB.setAdminPass(pw); } catch (e) {}
+      // 비번이 적용된 상태로 현재 화면 재렌더
+      try { if (window.__onAdminAuthed) window.__onAdminAuthed(pw); } catch (e) {}
+    }
+    async function tryUnlock() {
+      var pw = input.value;
+      var ok = false;
+      // 1) 서버 검증 우선 (security.sql 의 thj_is_admin) — 비번을 서버에서 확인.
+      //    security.sql 을 돌렸다면 이쪽이 진짜 검증이고, 소스의 PW_HASH 는 폴백일 뿐.
+      try {
+        if (window.DB && DB.checkAdmin) {
+          var res = await DB.checkAdmin(pw);
+          if (res && !res.missing) ok = !!res.ok;            // 서버가 판단
+          else ok = (await sha256(pw)) === PW_HASH;          // security.sql 미설치 → 로컬 폴백
+        } else {
+          ok = (await sha256(pw)) === PW_HASH;
+        }
+      } catch (e) {
+        try { ok = (await sha256(pw)) === PW_HASH; } catch (_) { ok = false; }
+      }
+      if (ok) { unlock(pw); }
+      else { err.textContent = '비밀번호가 올바르지 않습니다'; input.value = ''; input.focus(); }
+    }
+    btn.addEventListener('click', tryUnlock);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryUnlock(); });
+    setTimeout(function () { input.focus(); }, 60);
+  })();
+</script>
+<script src="supabase.js"></script>
+<script src="admin-charts.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
