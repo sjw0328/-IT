@@ -162,7 +162,7 @@ crypto.subtle.digest('SHA-256', new TextEncoder().encode('새비밀번호'))
 **최초 1회 설정**
 1. 리포 **Settings → Pages → Source: GitHub Actions** 로 변경.
 2. (커스텀 도메인) **Settings → Secrets and variables → Actions → Variables** 에
-   `SITE_ORIGIN` 추가 (예 `https://토론하자.kro.kr` 의 퓨니코드 `https://xn--hq1bm8jm9l.kro.kr`).
+   `SITE_ORIGIN` 추가 (예 `https://토론하자.kro.kr` 의 퓨니코드 `https://xn--6o2bu1z0rh3yd.kro.kr`).
    `app/CNAME` 에 도메인 한 줄도 커밋.
 3. 푸시하면 Actions 가 빌드·배포. 이후 새 토론은 cron(최대 3h) 또는 수동 **Run workflow** 로 반영.
 
