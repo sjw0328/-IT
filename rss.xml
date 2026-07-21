@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>토론하자 · 최신 토론</title>
+  <link>https://xn--6o2bu1z0rh3yd.kro.kr/</link>
+  <atom:link href="https://xn--6o2bu1z0rh3yd.kro.kr/rss.xml" rel="self" type="application/rss+xml" />
+  <description>찬반이 갈리는 실시간 토론 — 새로 열린 주제 피드</description>
+  <language>ko-KR</language>
+  <lastBuildDate>Sat, 04 Jul 2026 00:00:00 GMT</lastBuildDate>
+  <item>
+    <title>토론하자 — 찬반이 갈리는 실시간 토론</title>
+    <link>https://xn--6o2bu1z0rh3yd.kro.kr/</link>
+    <guid isPermaLink="true">https://xn--6o2bu1z0rh3yd.kro.kr/</guid>
+    <description>한 줄로 입장을 고르고, 근거로 부딪쳐라. 새 토론이 열리면 이 피드가 자동으로 채워집니다.</description>
+    <pubDate>Sat, 04 Jul 2026 00:00:00 GMT</pubDate>
+  </item>
+</channel>
+</rss>
